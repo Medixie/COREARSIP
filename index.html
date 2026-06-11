@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>COREARSIP - Core Archive System</title>
+  <link rel="icon" type="image/png" href="asset/favicon.png">
+  <link rel="shortcut icon" type="image/png" href="asset/favicon.png">
+  <link rel="apple-touch-icon" href="asset/favicon.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+ <!-- Login -->
+<body class="is-booting">
+<section class="login-screen" id="loginScreen">
+  <div class="login-overlay"></div>
+
+<div class="login-card login-card-premium">
+
+  <div class="login-brand-row">
+    <div class="login-brand-mark">
+      <img src="asset/favicon.png" alt="COREARSIP">
+    </div>
+
+    <div>
+      <strong>COREARSIP</strong>
+      <span>Core Archive System</span>
+    </div>
+  </div>
+
+  <div class="login-card-head">
+    <span class="login-kicker">Portal Arsip Digital</span>
+    <h1>Masuk ke Sistem</h1>
+    <p>Kelola arsip, peminjaman, retensi, dan laporan dalam satu platform terintegrasi.</p>
+  </div>
+
+  <div class="login-mini-info">
+    <span>✓</span>
+    <p>Session aktif selama 10 menit dan akan berakhir otomatis saat tidak ada aktivitas.</p>
+  </div>
+
+  <div class="field">
+    <label>Username</label>
+    <div class="login-input-wrap">
+      <span>👤</span>
+      <input id="username" class="input login-input" value="admin" placeholder="Masukkan username">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Password</label>
+    <div class="login-input-wrap">
+      <span>🔑</span>
+      <input id="password" type="password" class="input login-input" value="admin123" placeholder="Masukkan password">
+      <button
+  type="button"
+  class="password-toggle"
+  onclick="toggleLoginPassword()"
+  aria-label="Lihat password"
+>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </svg>
+</button>
+    </div>
+  </div>
+
+
+  <button class="btn-login premium-login-btn" onclick="login()">
+    Masuk ke COREARSIP
+  </button>
+
+  
+
+</div>
+
+  <footer class="login-footer">
+    © 2026 D4 Kearsipan & Sains Informasi. All rights reserved.
+  </footer>
+</section>
+
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-card">
+    <div class="spinner"></div>
+    <h3 id="loadingTitle">Memuat Dashboard</h3>
+    <p id="loadingText">Mohon tunggu sebentar...</p>
+  </div>
+</div>
+
+  <!-- App -->
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar coretax-navbar">
+
+  <!-- BARIS ATAS -->
+  <div class="coretax-nav-top">
+    <div class="coretax-brand-left">
+      <div class="brand-logo">
+        <img src="asset/favicon.png" alt="Logo COREARSIP">
+      </div>
+
+      <div class="coretax-brand-divider"></div>
+
+      <div class="coretax-brand-text">
+        <h2>COREARSIP</h2>
+        <p>Core Archive System</p>
+      </div>
+    </div>
+
+    <div class="coretax-running-area">
+      <div class="archive-running-info">
+
+        <div class="archive-running-mask">
+          <div class="archive-running-track">
+
+            <div class="archive-running-group">
+              <span>Pastikan setiap arsip memiliki nomor, kategori, unit kerja, tahun, dan status retensi.</span>
+              <span>Gunakan menu Data Arsip untuk pencarian dokumen secara cepat dan terstruktur.</span>
+              <span>Setiap peminjaman arsip wajib dicatat agar riwayat dokumen tetap terkontrol.</span>
+              <span>Dokumen arsip digital harus disimpan dengan metadata yang lengkap dan valid.</span>
+            </div>
+
+            <div class="archive-running-group" aria-hidden="true">
+              <span>Pastikan setiap arsip memiliki nomor, kategori, unit kerja, tahun, dan status retensi.</span>
+              <span>Gunakan menu Data Arsip untuk pencarian dokumen secara cepat dan terstruktur.</span>
+              <span>Setiap peminjaman arsip wajib dicatat agar riwayat dokumen tetap terkontrol.</span>
+              <span>Dokumen arsip digital harus disimpan dengan metadata yang lengkap dan valid.</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coretax-nav-right">
+      <button type="button" class="nav-icon-btn">‹</button>
+      <button type="button" class="nav-icon-btn">🔔</button>
+
+      <div class="coretax-user-pill">
+        <small id="navbarUserCode">COREARSIP</small>
+        <strong id="navbarUserName">Administrator</strong>
+      </div>
+
+      <button class="logout coretax-logout" onclick="logout()">Keluar</button>
+    </div>
+  </div>
+
+  <!-- BARIS BAWAH -->
+  <div class="coretax-nav-bottom">
+    <nav class="menu accordion-menu coretax-mega-nav">
+
+  <button class="menu-single active" onclick="showPage('home', this)">
+    <span class="menu-icon">
+      <img src="asset/unit kerja.png" alt="">
+    </span>
+    Home
+  </button>
+
+  <!-- MENU UTAMA -->
+  <div class="menu-group">
+    <button type="button" class="menu-parent" onclick="toggleMenuGroup(this)">
+      <span>MENU UTAMA</span>
+      <b>▾</b>
+    </button>
+
+    <div class="menu-sub coretax-mega" data-title="MENU UTAMA">
+      <div class="mega-column">
+        <h4>AKSES UTAMA</h4>
+
+        <button onclick="showPage('dashboard', this)">
+          <span class="menu-icon"><img src="asset/dash.png" alt=""></span>
+          <div>
+            <strong>Dashboard</strong>
+            <small>Monitoring statistik arsip dan retensi.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('arsip', this)">
+          <span class="menu-icon"><img src="asset/arsip.png" alt=""></span>
+          <div>
+            <strong>Data Arsip</strong>
+            <small>Telusuri, filter, export, dan kelola arsip.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('input', this)">
+          <span class="menu-icon"><img src="asset/input.png" alt=""></span>
+          <div>
+            <strong>Input Arsip</strong>
+            <small>Tambah arsip baru beserta metadata.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column mega-highlight">
+        <h4>FOKUS PENGELOLAAN</h4>
+        <p>Pastikan setiap dokumen memiliki nomor arsip, kategori, unit kerja, tahun, status retensi, dan file pendukung yang valid.</p>
+      </div>
+
+      <div class="mega-column">
+        <h4>REKOMENDASI</h4>
+        <button onclick="showPage('peminjaman', this)">
+          <span class="menu-icon"><img src="asset/pinjam.png" alt=""></span>
+          <div>
+            <strong>Peminjaman Arsip</strong>
+            <small>Kontrol dokumen yang sedang dipinjam.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('laporan', this)">
+          <span class="menu-icon"><img src="asset/dash.png" alt=""></span>
+          <div>
+            <strong>Laporan Arsip</strong>
+            <small>Lihat rekap dan export laporan.</small>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER DATA -->
+  <div class="menu-group">
+    <button type="button" class="menu-parent" onclick="toggleMenuGroup(this)">
+      <span>MASTER DATA</span>
+      <b>▾</b>
+    </button>
+
+    <div class="menu-sub coretax-mega" data-title="MASTER DATA">
+      <div class="mega-column">
+        <h4>PENGGUNA & AKSES</h4>
+
+        <button onclick="showPage('role', this)">
+          <span class="menu-icon"><img src="asset/input.png" alt=""></span>
+          <div>
+            <strong>Manajemen Role</strong>
+            <small>Kelola akun login dan hak akses.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('user', this)">
+          <span class="menu-icon"><img src="asset/user.png" alt=""></span>
+          <div>
+            <strong>Manajemen User</strong>
+            <small>Kelola data pengguna aplikasi.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column">
+        <h4>KLASIFIKASI ARSIP</h4>
+
+        <button onclick="showPage('unit', this)">
+          <span class="menu-icon"><img src="asset/unit kerja.png" alt=""></span>
+          <div>
+            <strong>Unit Kerja</strong>
+            <small>Master pemilik atau pengelola arsip.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('kategori-master', this)">
+          <span class="menu-icon"><img src="asset/input.png" alt=""></span>
+          <div>
+            <strong>Kategori Arsip</strong>
+            <small>Master klasifikasi dokumen.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('retensi', this)">
+          <span class="menu-icon"><img src="asset/retensi.png" alt=""></span>
+          <div>
+            <strong>Retensi Arsip</strong>
+            <small>Atur masa aktif, inaktif, dan status akhir.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column mega-highlight">
+        <h4>CATATAN MASTER DATA</h4>
+        <p>Master data menjadi dasar validasi input arsip, laporan, filter pencarian, dan kontrol retensi dokumen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSAKSI -->
+  <div class="menu-group">
+    <button type="button" class="menu-parent" onclick="toggleMenuGroup(this)">
+      <span>TRANSAKSI</span>
+      <b>▾</b>
+    </button>
+
+    <div class="menu-sub coretax-mega" data-title="TRANSAKSI">
+      <div class="mega-column">
+        <h4>AKTIVITAS ARSIP</h4>
+
+        <button onclick="showPage('peminjaman', this)">
+          <span class="menu-icon"><img src="asset/pinjam.png" alt=""></span>
+          <div>
+            <strong>Peminjaman</strong>
+            <small>Catat peminjaman dan pengembalian arsip.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('laporan', this)">
+          <span class="menu-icon"><img src="asset/dash.png" alt=""></span>
+          <div>
+            <strong>Laporan</strong>
+            <small>Filter dan export laporan arsip.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column">
+        <h4>KONFIGURASI</h4>
+
+        <button onclick="showPage('pengaturan', this)">
+          <span class="menu-icon"><img src="asset/pengaturan.png" alt=""></span>
+          <div>
+            <strong>Pengaturan</strong>
+            <small>Atur preferensi, backup, dan cache sistem.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('arsip', this)">
+          <span class="menu-icon"><img src="asset/arsip.png" alt=""></span>
+          <div>
+            <strong>Export Data Arsip</strong>
+            <small>Export Excel dan PDF dari menu Data Arsip.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column mega-highlight">
+        <h4>MONITORING</h4>
+        <p>Pastikan setiap peminjaman memiliki tanggal pinjam, deadline kembali, status, dan keterangan yang jelas.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANDUAN -->
+  <div class="menu-group">
+    <button type="button" class="menu-parent" onclick="toggleMenuGroup(this)">
+      <span>PANDUAN</span>
+      <b>▾</b>
+    </button>
+
+    <div class="menu-sub coretax-mega" data-title="PANDUAN">
+      <div class="mega-column">
+        <h4>PANDUAN PENGGUNAAN</h4>
+
+        <button onclick="showPage('input', this)">
+          <span>01</span>
+          <div>
+            <strong>Cara Input Arsip</strong>
+            <small>Isi nomor, kategori, unit kerja, tahun, status, dan file arsip.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('arsip', this)">
+          <span>02</span>
+          <div>
+            <strong>Cara Mencari Arsip</strong>
+            <small>Gunakan filter kategori, unit, tahun, status, dan keyword.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('peminjaman', this)">
+          <span>03</span>
+          <div>
+            <strong>Cara Peminjaman</strong>
+            <small>Catat ID arsip, peminjam, tanggal pinjam, dan deadline.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column">
+        <h4>PANDUAN LAPORAN</h4>
+
+        <button onclick="showPage('laporan', this)">
+          <span>04</span>
+          <div>
+            <strong>Cara Membuat Laporan</strong>
+            <small>Gunakan filter laporan sesuai kebutuhan rekap.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('arsip', this)">
+          <span>05</span>
+          <div>
+            <strong>Export Excel / PDF</strong>
+            <small>Export data arsip berdasarkan hasil filter.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column mega-highlight">
+        <h4>STANDAR INPUT</h4>
+        <p>Data arsip yang baik minimal memiliki nomor arsip, judul, kategori, unit kerja, tahun, status retensi, dan file dokumen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFORMASI -->
+  <div class="menu-group">
+    <button type="button" class="menu-parent" onclick="toggleMenuGroup(this)">
+      <span>INFORMASI</span>
+      <b>▾</b>
+    </button>
+
+    <div class="menu-sub coretax-mega" data-title="INFORMASI">
+      <div class="mega-column">
+        <h4>INFORMASI SISTEM</h4>
+
+        <button onclick="showPage('dashboard', this)">
+          <span>i</span>
+          <div>
+            <strong>Status Arsip</strong>
+            <small>Aktif, inaktif, permanen, dan musnah.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('retensi', this)">
+          <span>i</span>
+          <div>
+            <strong>Informasi Retensi</strong>
+            <small>Aturan masa simpan dan status akhir arsip.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('pengaturan', this)">
+          <span>i</span>
+          <div>
+            <strong>Backup & Cache</strong>
+            <small>Backup data lokal dan reset cache browser.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column mega-highlight">
+        <h4>INFO ARSIP</h4>
+        <p>Gunakan COREARSIP sebagai pusat pencatatan, pencarian, peminjaman, retensi, dan pelaporan dokumen digital.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q&A -->
+  <div class="menu-group">
+    <button type="button" class="menu-parent" onclick="toggleMenuGroup(this)">
+      <span>Q&A</span>
+      <b>▾</b>
+    </button>
+
+    <div class="menu-sub coretax-mega" data-title="Q&A">
+      <div class="mega-column">
+        <h4>PERTANYAAN UMUM</h4>
+
+        <button onclick="showPage('arsip', this)">
+          <span>?</span>
+          <div>
+            <strong>Bagaimana mencari arsip?</strong>
+            <small>Buka Data Arsip, lalu gunakan pencarian dan filter.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('input', this)">
+          <span>?</span>
+          <div>
+            <strong>Bagaimana menambah arsip?</strong>
+            <small>Buka Input Arsip dan isi metadata dengan lengkap.</small>
+          </div>
+        </button>
+
+        <button onclick="showPage('pengaturan', this)">
+          <span>?</span>
+          <div>
+            <strong>Bagaimana backup data?</strong>
+            <small>Buka Pengaturan lalu gunakan Backup Data JSON.</small>
+          </div>
+        </button>
+      </div>
+
+      <div class="mega-column mega-highlight">
+        <h4>BANTUAN CEPAT</h4>
+        <p>Jika data tidak muncul, cek koneksi Spreadsheet, refresh halaman, atau reset cache lokal melalui menu Pengaturan.</p>
+      </div>
+    </div>
+  </div>
+
+</nav>
+  </div>
+
+</aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header id="mainTopbar" class="topbar dashboard-topbar"></header><header class="topbar dashboard-topbar">
+  <div class="topbar-left">
+    <h1 id="pageTitle">Dashboard Arsip</h1>
+    <p id="pageSubtitle">Monitoring data arsip, retensi, dan peminjaman.</p>
+
+<div class="role-focus-panel" id="roleFocusPanel">
+
+  <div class="role-focus-card role-main">
+    <span class="role-focus-label">ROLE SAAT INI</span>
+    <h3 id="roleFocusRole">-</h3>
+    <p id="roleFocusUser">-</p>
+  </div>
+
+  <div class="role-focus-card">
+    <span class="role-focus-label">AKSES UTAMA</span>
+    <ul id="roleFocusAccess">
+      <li>-</li>
+    </ul>
+  </div>
+
+  <div class="role-focus-card">
+    <span class="role-focus-label">BATASAN AKSES</span>
+    <ul id="roleFocusLimit">
+      <li>-</li>
+    </ul>
+  </div>
+
+  <div class="role-focus-card">
+    <span class="role-focus-label">FOKUS KERJA</span>
+    <ul id="roleFocusWork">
+      <li>-</li>
+    </ul>
+  </div>
+
+</div>
+
+  <div class="top-actions">
+  <div class="sync-chip" id="syncChip">
+    <span id="syncDot"></span>
+    <b id="syncText">Local Mode</b>
+  </div>
+
+  <input id="searchInput" class="input search" placeholder="Cari arsip cepat..." onkeyup="searchArchive()">
+  <button class="btn btn-primary" onclick="showPage('input')">Input Arsip</button>
+</div>
+</header>
+
+<section class="page active" id="page-home">
+  <div class="archive-home">
+
+    <div class="archive-hero archive-hero-with-slider">
+
+  <div class="archive-hero-text">
+    <p class="archive-welcome" id="homeWelcomeSmall">
+      Selamat datang di COREARSIP.
+    </p>
+
+    <h1 id="homeWelcomeTitle">
+      COREARSIP siap membantu pengelolaan arsip digital Anda.
+    </h1>
+
+    <div class="archive-title-line"></div>
+
+    <p class="archive-hero-desc">
+      Kelola, simpan, telusuri, dan pantau arsip dengan mudah, cepat,
+      dan aman dalam satu platform kearsipan terintegrasi.
+    </p>
+
+    <div class="home-search-box">
+      <input
+        type="text"
+        id="homeSearchInput"
+        placeholder="Cari arsip cepat..."
+        onkeydown="if(event.key === 'Enter') searchArchiveFromHome()"
+      >
+
+      <button type="button" onclick="searchArchiveFromHome()">
+        Cari Arsip
+      </button>
+    </div>
+
+    <div class="archive-hero-actions">
+      <button type="button" onclick="showPage('arsip')">
+        <span>📁</span>
+        Lihat Data Arsip
+      </button>
+
+      <button type="button" onclick="showPage('input')">
+        <span>＋</span>
+        Input Arsip Baru
+      </button>
+    </div>
+  </div>
+
+  <div class="archive-hero-slider">
+    <div class="home-slide active">
+      <img src="asset/01.png" alt="Penyegaran Tampilan Sistem Arsip">
+    </div>
+
+    <div class="home-slide">
+      <img src="asset/02.png" alt="Sistem Arsip Digital Lebih Efisien">
+    </div>
+
+    <div class="home-slide">
+      <img src="asset/03.png" alt="Arsip Lebih Aman dan Terpantau">
+    </div>
+
+    <button type="button" class="home-slide-nav prev" onclick="changeHomeSlide(-1)">‹</button>
+    <button type="button" class="home-slide-nav next" onclick="changeHomeSlide(1)">›</button>
+
+    <div class="home-slide-dots">
+      <button type="button" class="active" onclick="setHomeSlide(0)"></button>
+      <button type="button" onclick="setHomeSlide(1)"></button>
+      <button type="button" onclick="setHomeSlide(2)"></button>
+    </div>
+  </div>
+
+</div>
+
+<div class="coretax-service-section">
+  <div class="coretax-service-head">
+    <div>
+      <span>LAYANAN UTAMA</span>
+      <h2>Layanan COREARSIP</h2>
+      <p>Pilih layanan pengelolaan arsip digital sesuai kebutuhan operasional.</p>
+    </div>
+  </div>
+
+  <div class="coretax-service-grid">
+
+    <button type="button" class="coretax-service-card featured" onclick="showPage('arsip')">
+      <div class="service-icon">📁</div>
+      <div class="service-content">
+        <strong>Data Arsip</strong>
+        <small>Telusuri, filter, dan monitor seluruh arsip digital yang tersimpan.</small>
+      </div>
+      <i>›</i>
+    </button>
+
+    <button type="button" class="coretax-service-card featured yellow" onclick="showPage('input')">
+      <div class="service-icon">＋</div>
+      <div class="service-content">
+        <strong>Input Arsip</strong>
+        <small>Tambahkan metadata dan file arsip baru secara terstruktur.</small>
+      </div>
+      <i>›</i>
+    </button>
+
+    <button type="button" class="coretax-service-card" onclick="showPage('peminjaman')">
+      <div class="service-icon">↔</div>
+      <div class="service-content">
+        <strong>Peminjaman Arsip</strong>
+        <small>Catat peminjaman, pengembalian, dan status keterlambatan dokumen.</small>
+      </div>
+      <i>›</i>
+    </button>
+
+    <button type="button" class="coretax-service-card" onclick="showPage('retensi')">
+      <div class="service-icon">⏱</div>
+      <div class="service-content">
+        <strong>Retensi Arsip</strong>
+        <small>Atur masa aktif, masa inaktif, dan status akhir arsip.</small>
+      </div>
+      <i>›</i>
+    </button>
+
+    <button type="button" class="coretax-service-card" onclick="showPage('laporan')">
+      <div class="service-icon">📊</div>
+      <div class="service-content">
+        <strong>Laporan Arsip</strong>
+        <small>Lihat rekap, monitoring, dan kebutuhan laporan arsip digital.</small>
+      </div>
+      <i>›</i>
+    </button>
+
+    <button type="button" class="coretax-service-card" onclick="showPage('user')">
+      <div class="service-icon">👤</div>
+      <div class="service-content">
+        <strong>Manajemen User</strong>
+        <small>Kelola pengguna, role, dan akses sistem sesuai kewenangan.</small>
+      </div>
+      <i>›</i>
+    </button>
+
+  </div>
+</div>
+
+    
+</section>
+
+<!-- Dashboard -->
+<section class="page" id="page-dashboard">
+<div class="stats">
+  <div class="stat-card stat-total">
+    <div class="stat-icon"><img src="asset/arsip.png" alt=""></div>
+    <div class="stat-content">
+      <h3 id="totalArsip">0</h3>
+      <p>Total Arsip</p>
+      <small>Jumlah seluruh dokumen arsip</small>
+    </div>
+  </div>
+
+  <div class="stat-card stat-aktif">
+    <div class="stat-icon"><img src="asset/arsip.png" alt=""></div>
+    <div class="stat-content">
+      <h3 id="arsipAktif">0</h3>
+      <p>Arsip Aktif</p>
+      <small>Dokumen yang masih aktif digunakan</small>
+    </div>
+  </div>
+
+  <div class="stat-card stat-inaktif">
+    <div class="stat-icon"><img src="asset/arsip.png" alt=""></div>
+    <div class="stat-content">
+      <h3 id="arsipInaktif">0</h3>
+      <p>Arsip Inaktif</p>
+      <small>Dokumen yang sudah jarang digunakan</small>
+    </div>
+  </div>
+
+  <div class="stat-card stat-permanen">
+    <div class="stat-icon"><img src="asset/arsip.png" alt=""></div>
+    <div class="stat-content">
+      <h3 id="arsipPermanen">0</h3>
+      <p>Permanen</p>
+      <small>Dokumen yang disimpan permanen</small>
+    </div>
+  </div>
+</div>
+
+  <div class="grid-2 chart-section">
+    <!-- Kiri -->
+    <div class="panel">
+      <div class="panel-title">
+        <h2>Grafik Arsip per Kategori</h2>
+        <p>Distribusi arsip berdasarkan klasifikasi.</p>
+      </div>
+
+      <div class="chart-box">
+        <div id="categoryChart3D" class="hc-chart"></div>
+      </div>
+    </div>
+
+    <!-- Kanan -->
+    <div class="panel dark">
+      <div class="panel-title">
+        <h2>Status Retensi</h2>
+        <p>Aktif, inaktif, permanen, dan musnah.</p>
+      </div>
+
+      <div class="chart-box">
+        <div id="statusChart3D" class="hc-chart"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <!-- Data Arsip -->
+      <section class="page" id="page-arsip">
+        <div class="panel">
+          <div class="panel-title">
+            <h2>Data Arsip Digital</h2>
+            <p>Daftar arsip</p>
+          </div>
+
+          <div class="archive-filter-box">
+  <div class="archive-filter-header">
+    <div>
+      <h3>Filter Data Arsip</h3>
+      <p>Pilih kategori, unit, tahun, atau status untuk menyaring data arsip.</p>
+    </div>
+
+    <div class="archive-filter-actions">
+  <button type="button" class="btn-reset-filter" onclick="resetArchiveFilter()">
+    Reset Filter
+  </button>
+
+  <button type="button" class="btn-export-excel" onclick="exportArchiveExcel()">
+    Export Excel
+  </button>
+
+  <button type="button" class="btn-export-pdf" onclick="exportArchivePDF()">
+    Export PDF
+  </button>
+</div>
+  </div>
+
+  <div class="archive-filter-grid">
+    <label>
+      <span>Kategori</span>
+      <select id="filterKategori" onchange="filterArchive()">
+        <option value="">Semua Kategori</option>
+      </select>
+    </label>
+
+    <label>
+      <span>Unit</span>
+      <select id="filterUnit" onchange="filterArchive()">
+        <option value="">Semua Unit</option>
+      </select>
+    </label>
+
+    <label>
+      <span>Tahun</span>
+      <select id="filterTahun" onchange="filterArchive()">
+        <option value="">Semua Tahun</option>
+      </select>
+    </label>
+
+    <label>
+      <span>Status</span>
+      <select id="filterStatus" onchange="filterArchive()">
+        <option value="">Semua Status</option>
+        <option value="AKTIF">AKTIF</option>
+        <option value="INAKTIF">INAKTIF</option>
+        <option value="PERMANEN">PERMANEN</option>
+        <option value="MUSNAH">MUSNAH</option>
+      </select>
+    </label>
+  </div>
+</div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID Arsip</th>
+                  <th>Nomor</th>
+                  <th>Judul</th>
+                  <th>Kategori</th>
+                  <th>Unit</th>
+                  <th>Tahun</th>
+                  <th>Status</th>
+                  <th>File</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="archiveTable"></tbody>
+            </table>
+          </div>
+          <div class="pagination-box" id="archivePagination"></div>
+        </div>
+      </section>
+
+      <!-- Input Arsip -->
+      <section class="page" id="page-input">
+        <div class="panel">
+          <div class="panel-title">
+            <h2>Input Data Arsip</h2>
+            <p>Input metadata arsip dan upload file dummy lokal.</p>
+          </div>
+
+          <form id="archiveForm" onsubmit="saveArchive(event)">
+            <div class="form-grid">
+              <div class="field">
+                <label>Nomor Arsip</label>
+                <input class="input" id="nomorArsip" required placeholder="SM/001/I/2026">
+              </div>
+
+              <div class="field">
+                <label>Kategori</label>
+                <select class="input" id="kategori" required>
+                  <option value="">Pilih kategori</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label>Judul Arsip</label>
+                <input class="input" id="judulArsip" required placeholder="Judul arsip">
+              </div>
+
+              <div class="field">
+                <label>Unit Kerja</label>
+                <select class="input" id="unitKerja" required>
+                  <option value="">Pilih unit kerja</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Tahun</label>
+                <input class="input" id="tahun" type="number" required placeholder="2026">
+              </div>
+
+              <div class="field">
+                <label>Status Retensi</label>
+                <select class="input" id="statusRetensi" required>
+                  <option>AKTIF</option>
+                  <option>INAKTIF</option>
+                  <option>PERMANEN</option>
+                  <option>MUSNAH</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Upload File</label>
+                <input class="input" id="fileArsip" type="file" accept=".pdf,.jpg,.jpeg,.png">
+              </div>
+            </div>
+
+            <div class="form-action">
+              <button class="btn btn-primary" type="submit">Simpan Arsip</button>
+              <button class="btn" type="reset">Reset</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="page" id="page-role">
+  <div class="panel user-panel">
+    <div class="user-table-header">
+      <div class="panel-title">
+        <h2>Manajemen Role & Akun Login</h2>
+        <p>Kelola username, password, role akses, dan status akun sistem.</p>
+      </div>
+
+      <button class="btn btn-primary" type="button" onclick="openRoleForm()">
+        Tambah Akun
+      </button>
+    </div>
+
+    <div class="user-form-box" id="roleFormBox">
+      <div class="form-grid">
+        <div class="field">
+          <label>Nama Pengguna</label>
+          <input class="input" id="roleNama" placeholder="Administrator Demo">
+        </div>
+
+        <div class="field">
+          <label>Username</label>
+          <input class="input" id="roleUsername" placeholder="admin">
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input class="input" id="rolePassword" placeholder="admin123">
+        </div>
+
+        <div class="field">
+          <label>Role Akses</label>
+          <select class="input" id="roleAkses">
+            <option value="Super Admin">Super Admin</option>
+            <option value="Admin">Admin</option>
+            <option value="Operator Arsip">Operator Arsip</option>
+            <option value="Viewer">Viewer</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select class="input" id="roleStatus">
+            <option value="Aktif">Aktif</option>
+            <option value="Nonaktif">Nonaktif</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Keterangan</label>
+          <input class="input" id="roleKeterangan" placeholder="Akun administrator sistem">
+        </div>
+      </div>
+
+      <div class="form-action">
+        <button class="btn btn-primary" type="button" id="btnSaveRole" onclick="saveRoleAccount()">
+          Simpan Akun
+        </button>
+
+        <button class="btn" type="button" onclick="clearRoleForm()">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrap user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Keterangan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="roleTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+      <!-- Manajemen User -->
+<section class="page" id="page-user">
+  <div class="panel user-panel">
+    <div class="user-table-header">
+      <div>
+        <h2>Manajemen Pengguna</h2>
+        <p>Daftar pengguna aplikasi, role akses, divisi, dan status user.</p>
+      </div>
+
+      <button class="btn btn-primary" type="button" onclick="openUserForm()">
+        Tambah User
+      </button>
+    </div>
+
+    <!-- Form Tambah / Edit User -->
+    <div class="user-form-box" id="userFormBox">
+      <div class="form-grid">
+        <div class="field">
+          <label>Nama Lengkap</label>
+          <input class="input" id="namaUser" placeholder="Contoh: Medi">
+        </div>
+
+        <div class="field">
+          <label>Username</label>
+          <input class="input" id="usernameUser" placeholder="admin">
+        </div>
+
+        <div class="field">
+          <label>Role / Akses</label>
+          <select class="input" id="roleUser">
+            <option>Super Admin</option>
+            <option>Admin</option>
+            <option>Operator Arsip</option>
+            <option>Viewer</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Divisi</label>
+          <input class="input" id="divisiUser" placeholder="Contoh: ArsipAdministrasi">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select class="input" id="statusUser">
+            <option>Aktif</option>
+            <option>Nonaktif</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Keterangan</label>
+          <input class="input" id="keteranganUser" placeholder="Contoh: User aktif sistem arsip">
+        </div>
+      </div>
+
+      <div class="form-action">
+        <button class="btn btn-primary" type="button" id="btnSaveUser" onclick="saveUser()">
+          Simpan User
+        </button>
+
+        <button class="btn" type="button" onclick="clearUserForm()">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabel User -->
+    <div class="table-wrap user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Lengkap</th>
+            <th>Username</th>
+            <th>Role / Akses</th>
+            <th>Divisi</th>
+            <th>Status / Keterangan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody id="userTable"></tbody>
+      </table>
+    </div>
+    <div class="pagination-box" id="userPagination"></div>
+  </div>
+</section>
+
+<!-- Unit Kerja -->
+<section class="page" id="page-unit">
+  <div class="panel user-panel">
+    <div class="user-table-header">
+      <div>
+        <h2>Unit Kerja</h2>
+        <p>Master unit kerja sebagai pemilik atau pengelola arsip.</p>
+      </div>
+
+      <button class="btn btn-primary" type="button" onclick="openUnitForm()">
+        Tambah Unit
+      </button>
+    </div>
+
+    <div class="user-form-box" id="unitFormBox">
+      <div class="form-grid">
+        <div class="field">
+          <label>Kode Unit</label>
+          <input class="input" id="kodeUnit" placeholder="Contoh: ADM">
+        </div>
+
+        <div class="field">
+          <label>Nama Unit</label>
+          <input class="input" id="namaUnit" placeholder="Contoh: Administrasi">
+        </div>
+
+        <div class="field">
+          <label>Penanggung Jawab</label>
+          <input class="input" id="picUnit" placeholder="Contoh: Admin Arsip">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select class="input" id="statusUnit">
+            <option>Aktif</option>
+            <option>Nonaktif</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Keterangan</label>
+          <input class="input" id="keteranganUnit" placeholder="Keterangan unit kerja">
+        </div>
+      </div>
+
+      <div class="form-action">
+        <button class="btn btn-primary" type="button" id="btnSaveUnit" onclick="saveUnit()">Simpan Unit</button>
+        <button class="btn" type="button" onclick="clearUnitForm()">Reset</button>
+      </div>
+    </div>
+
+    <div class="table-wrap user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Kode Unit</th>
+            <th>Nama Unit</th>
+            <th>PIC</th>
+            <th>Status</th>
+            <th>Keterangan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="unitTable"></tbody>
+      </table>
+    </div>
+    <div class="pagination-box" id="unitPagination"></div>
+  </div>
+</section>
+
+<!-- Kategori Arsip -->
+<section class="page" id="page-kategori-master">
+  <div class="panel user-panel">
+    <div class="user-table-header">
+      <div>
+        <h2>Kategori Arsip</h2>
+        <p>Master klasifikasi arsip untuk pengelompokan dokumen.</p>
+      </div>
+
+      <button class="btn btn-primary" type="button" onclick="openKategoriForm()">
+        Tambah Kategori
+      </button>
+    </div>
+
+    <div class="user-form-box" id="kategoriFormBox">
+      <div class="form-grid">
+        <div class="field">
+          <label>Kode Kategori</label>
+          <input class="input" id="kodeKategori" placeholder="Contoh: SM">
+        </div>
+
+        <div class="field">
+          <label>Nama Kategori</label>
+          <input class="input" id="namaKategori" placeholder="Contoh: Surat Masuk">
+        </div>
+
+        <div class="field">
+          <label>Jenis Dokumen</label>
+          <select class="input" id="jenisKategori">
+            <option>Surat</option>
+            <option>Laporan</option>
+            <option>Berita Acara</option>
+            <option>Formulir</option>
+            <option>Dokumen Lainnya</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select class="input" id="statusKategori">
+            <option>Aktif</option>
+            <option>Nonaktif</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Keterangan</label>
+          <input class="input" id="keteranganKategori" placeholder="Keterangan kategori arsip">
+        </div>
+      </div>
+
+      <div class="form-action">
+        <button class="btn btn-primary" type="button" id="btnSaveKategori" onclick="saveKategori()">Simpan Kategori</button>
+        <button class="btn" type="button" onclick="clearKategoriForm()">Reset</button>
+      </div>
+    </div>
+
+    <div class="table-wrap user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Nama Kategori</th>
+            <th>Jenis</th>
+            <th>Status</th>
+            <th>Keterangan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="kategoriTable"></tbody>
+      </table>
+    </div>
+    <div class="pagination-box" id="kategoriPagination"></div>
+  </div>
+</section>
+
+<!-- Retensi Arsip -->
+<section class="page" id="page-retensi">
+  <div class="panel user-panel">
+    <div class="user-table-header">
+      <div>
+        <h2>Retensi Arsip</h2>
+        <p>Pengaturan masa aktif, masa inaktif, dan status akhir arsip.</p>
+      </div>
+
+      <button class="btn btn-primary" type="button" onclick="openRetensiForm()">
+        Tambah Retensi
+      </button>
+    </div>
+
+    <div class="user-form-box" id="retensiFormBox">
+      <div class="form-grid">
+        <div class="field">
+          <label>Kategori Arsip</label>
+          <input class="input" id="kategoriRetensi" placeholder="Contoh: Surat Masuk">
+        </div>
+
+        <div class="field">
+          <label>Masa Aktif</label>
+          <input class="input" id="masaAktifRetensi" placeholder="Contoh: 2 Tahun">
+        </div>
+
+        <div class="field">
+          <label>Masa Inaktif</label>
+          <input class="input" id="masaInaktifRetensi" placeholder="Contoh: 3 Tahun">
+        </div>
+
+        <div class="field">
+          <label>Status Akhir</label>
+          <select class="input" id="statusAkhirRetensi">
+            <option>PERMANEN</option>
+            <option>MUSNAH</option>
+            <option>INAKTIF</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Keterangan</label>
+          <input class="input" id="keteranganRetensi" placeholder="Keterangan aturan retensi">
+        </div>
+      </div>
+
+      <div class="form-action">
+        <button class="btn btn-primary" type="button" id="btnSaveRetensi" onclick="saveRetensi()">Simpan Retensi</button>
+        <button class="btn" type="button" onclick="clearRetensiForm()">Reset</button>
+      </div>
+    </div>
+
+    <div class="table-wrap user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Kategori</th>
+            <th>Masa Aktif</th>
+            <th>Masa Inaktif</th>
+            <th>Status Akhir</th>
+            <th>Keterangan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="retensiTable"></tbody>
+      </table>
+    </div>
+    <div class="pagination-box" id="retensiPagination"></div>
+  </div>
+</section>
+
+<!-- Peminjaman Arsip -->
+<section class="page" id="page-peminjaman">
+  <div class="panel user-panel">
+    <div class="user-table-header">
+      <div>
+        <h2>Peminjaman Arsip</h2>
+        <p>Input dan monitoring peminjaman dokumen arsip.</p>
+      </div>
+
+      <button class="btn btn-primary" type="button" onclick="openPeminjamanForm()">
+        Tambah Peminjaman
+      </button>
+    </div>
+
+    <div class="user-form-box" id="peminjamanFormBox">
+      <div class="form-grid">
+        <div class="field">
+          <label>ID Arsip</label>
+          <input class="input" id="idArsipPinjam" placeholder="Contoh: ARS-001">
+        </div>
+
+        <div class="field">
+          <label>Nama Peminjam</label>
+          <input class="input" id="namaPeminjam" placeholder="Nama peminjam">
+        </div>
+
+        <div class="field">
+          <label>Unit Peminjam</label>
+          <input class="input" id="unitPeminjam" placeholder="Contoh: Administrasi">
+        </div>
+
+        <div class="field">
+          <label>Tanggal Pinjam</label>
+          <input class="input" id="tanggalPinjam" type="date">
+        </div>
+
+        <div class="field">
+          <label>Deadline Kembali</label>
+          <input class="input" id="deadlineKembali" type="date">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select class="input" id="statusPeminjaman">
+            <option>DIPINJAM</option>
+            <option>DIKEMBALIKAN</option>
+            <option>TERLAMBAT</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Keterangan</label>
+          <input class="input" id="keteranganPinjam" placeholder="Keterangan peminjaman">
+        </div>
+      </div>
+
+      <div class="form-action">
+        <button class="btn btn-primary" type="button" id="btnSavePeminjaman" onclick="savePeminjaman()">Simpan Peminjaman</button>
+        <button class="btn" type="button" onclick="clearPeminjamanForm()">Reset</button>
+      </div>
+    </div>
+
+    <div class="table-wrap user-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID Arsip</th>
+            <th>Nama Peminjam</th>
+            <th>Unit</th>
+            <th>Tanggal Pinjam</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Keterangan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="peminjamanTable"></tbody>
+      </table>
+    </div>
+    <div class="pagination-box" id="peminjamanPagination"></div>
+  </div>
+</section>
+
+<!-- Laporan -->
+<section class="page" id="page-laporan">
+  <div class="panel">
+    <div class="panel-title">
+      <h2>Laporan Arsip</h2>
+      <p>Filter laporan arsip berdasarkan periode, kategori, unit kerja, dan status retensi.</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Dari Tanggal</label>
+        <input class="input" type="date">
+      </div>
+
+      <div class="field">
+        <label>Sampai Tanggal</label>
+        <input class="input" type="date">
+      </div>
+
+      <div class="field">
+        <label>Kategori</label>
+        <select class="input">
+          <option>Semua Kategori</option>
+          <option>Surat Masuk</option>
+          <option>Surat Keluar</option>
+          <option>Laporan</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Status Retensi</label>
+        <select class="input">
+          <option>Semua Status</option>
+          <option>AKTIF</option>
+          <option>INAKTIF</option>
+          <option>PERMANEN</option>
+          <option>MUSNAH</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-action">
+      <button class="btn btn-primary">Tampilkan Laporan</button>
+      <button class="btn">Export Excel</button>
+      <button class="btn">Export PDF</button>
+    </div>
+  </div>
+</section>
+
+<!-- Pengaturan -->
+<section class="page" id="page-pengaturan">
+  <div class="panel settings-panel">
+    <div class="panel-title">
+      <h2>Pengaturan Sistem</h2>
+      <p>Atur preferensi tampilan, data, dan maintenance aplikasi COREARSIP.</p>
+    </div>
+
+    <div class="settings-grid">
+
+      <div class="settings-card">
+        <h3>Profil Aplikasi</h3>
+        <p>Informasi dasar yang digunakan pada tampilan sistem.</p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Nama Aplikasi</label>
+            <input class="input" id="settingAppName" value="COREARSIP">
+          </div>
+
+          <div class="field">
+            <label>Nama Instansi</label>
+            <input class="input" id="settingInstansi" placeholder="Contoh: D4 Kearsipan & Sains Informasi">
+          </div>
+
+          <div class="field full">
+            <label>Teks Footer</label>
+            <input class="input" id="settingFooter" value="© 2026 D4 Kearsipan & Sains Informasi. All rights reserved.">
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3>Preferensi Tampilan</h3>
+        <p>Kontrol tampilan halaman dan landing page setelah login.</p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Default Halaman Setelah Login</label>
+            <select class="input" id="settingDefaultPage">
+              <option value="home">Home</option>
+              <option value="dashboard">Dashboard</option>
+              <option value="arsip">Data Arsip</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Mode Card</label>
+            <select class="input" id="settingCardMode">
+              <option value="normal">Normal</option>
+              <option value="glass">Transparan / Glass</option>
+              <option value="solid">Putih Solid</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3>Data & Tabel</h3>
+        <p>Atur jumlah data yang tampil di tabel.</p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Data Arsip per Halaman</label>
+            <select class="input" id="settingArsipPerPage">
+              <option value="6">6 Data</option>
+              <option value="8">8 Data</option>
+              <option value="10">10 Data</option>
+              <option value="12">12 Data</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Master Data per Halaman</label>
+            <select class="input" id="settingMasterPerPage">
+              <option value="8">8 Data</option>
+              <option value="10">10 Data</option>
+              <option value="12">12 Data</option>
+              <option value="15">15 Data</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-card danger-zone">
+        <h3>Maintenance Sistem</h3>
+        <p>Gunakan fitur ini hanya saat perlu backup atau reset data lokal browser.</p>
+
+        <div class="settings-action-grid">
+          <button type="button" class="btn" onclick="backupLocalData()">
+            Backup Data JSON
+          </button>
+
+          <button type="button" class="btn btn-danger-soft" onclick="resetLocalCache()">
+            Reset Cache Lokal
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="form-action settings-save-action">
+      <button class="btn btn-primary" type="button" onclick="saveSystemSettings()">
+        Simpan Pengaturan
+      </button>
+
+      <button class="btn" type="button" onclick="loadSystemSettings()">
+        Muat Ulang
+      </button>
+    </div>
+  </div>
+</section>
+
+      <footer class="app-footer">
+        © 2026 D4 Kearsipan & Sains Informasi. All rights reserved.
+      </footer>
+    </main>
+  </div>
+
+  <!-- JS -->
+
+ <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script> 
+ <script src="script.js?v=2"></script>
+  <!-- GLOBAL SAVE LOADER -->
+<div class="save-loader" id="saveLoader">
+  <div class="save-loader-card">
+    <div class="save-spinner"></div>
+    <h3 id="saveLoaderTitle">Menyimpan Data</h3>
+    <p id="saveLoaderText">Mohon tunggu sebentar...</p>
+  </div>
+</div>
+
+<!-- GLOBAL TOAST NOTIFICATION -->
+<div class="toast-notification" id="toastNotification">
+  <div class="toast-icon" id="toastIcon">✓</div>
+  <div>
+    <strong id="toastTitle">Berhasil</strong>
+    <p id="toastMessage">Data berhasil diproses.</p>
+  </div>
+</div>
+
+<!-- GLOBAL DELETE CONFIRM MODAL -->
+<div class="delete-modal" id="deleteModal">
+  <div class="delete-modal-card">
+    <div class="delete-icon">!</div>
+    <h3 id="deleteModalTitle">Hapus Data?</h3>
+    <p id="deleteModalText">Data yang dihapus tidak dapat dikembalikan.</p>
+
+    <div class="delete-modal-action">
+      <button type="button" class="btn-delete-cancel" onclick="closeDeleteModal()">
+        Batal
+      </button>
+      <button type="button" class="btn-delete-confirm" onclick="confirmDeleteAction()">
+        Ya, Hapus
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

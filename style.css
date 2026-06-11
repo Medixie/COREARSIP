@@ -1,0 +1,6042 @@
+/* =========================================================
+   SIARDI - CORETAX PORTAL STYLE
+   Replace full style.css
+========================================================= */
+
+:root {
+  --bg: #eef3fb;
+  --bg-2: #f7f9fd;
+
+  --navy: #17245a;
+  --navy-2: #23336e;
+  --navy-3: #0a1852;
+
+  --yellow: #f5c400;
+  --yellow-2: #ffc928;
+  --yellow-soft: #fff5cf;
+
+  --white: #ffffff;
+  --text: #17245a;
+  --muted: #6f7892;
+  --border: #e5eaf3;
+
+  --success: #20b26b;
+  --warning: #f2a900;
+  --danger: #d93f45;
+  --purple: #6a5cff;
+
+  --shadow: 0 14px 34px rgba(23, 36, 90, 0.10);
+  --shadow-soft: 0 8px 22px rgba(23, 36, 90, 0.07);
+
+  --radius: 12px;
+  --radius-lg: 18px;
+  --transition: 0.22s ease;
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 94% 18%, rgba(23, 36, 90, 0.12), transparent 28%),
+    radial-gradient(circle at 8% 10%, rgba(245, 196, 0, 0.13), transparent 24%),
+    linear-gradient(180deg, #f8fafd 0%, #eef3fb 52%, #e9eef7 100%);
+  animation: pageFade 0.45s ease both;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+img {
+  max-width: 100%;
+}
+
+/* =========================================================
+   LOGIN PAGE
+========================================================= */
+
+.login-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: hidden;
+  background: url("asset/coretax.png") center center / cover no-repeat;
+}
+
+.login-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.login-card {
+  position: relative;
+  z-index: 2;
+  width: min(390px, 92%);
+  padding: 32px 34px 30px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.97);
+  border-top: 5px solid var(--yellow);
+  box-shadow: 0 22px 48px rgba(23, 36, 90, 0.25);
+  animation: loginZoom 0.4s ease both;
+}
+
+.login-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.login-logo img {
+  max-width: 170px;
+  height: auto;
+  object-fit: contain;
+}
+
+.login-card h1 {
+  margin: 8px 0 28px;
+  text-align: center;
+  font-size: 26px;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.login-card .field {
+  margin-bottom: 18px;
+}
+
+.login-card .field label {
+  display: block;
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.login-input {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px;
+  border-radius: 9px;
+  border: 1px solid #d8deea;
+  outline: none;
+  color: var(--navy);
+  background: #eef3fb;
+  box-shadow: none;
+}
+
+.login-input:focus {
+  border-color: var(--yellow);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(245, 196, 0, 0.22);
+}
+
+.btn-login {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  border-radius: 9px;
+  margin-top: 2px;
+  color: var(--navy);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+  box-shadow: 0 8px 18px rgba(245, 196, 0, 0.28);
+}
+
+.btn-login:hover {
+  background: linear-gradient(135deg, #ffdc55, var(--yellow));
+  transform: translateY(-2px);
+}
+
+.login-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--navy-3), var(--navy), var(--navy-2));
+  border-top: 4px solid var(--yellow);
+}
+
+/* Login / App separation */
+body.is-login {
+  overflow: hidden;
+}
+
+body.is-login .app {
+  display: none !important;
+}
+
+body.is-login .login-screen {
+  display: grid !important;
+}
+
+body.is-app {
+  overflow: auto;
+}
+
+body.is-app .login-screen {
+  display: none !important;
+}
+
+body.is-app .app {
+  display: flex !important;
+}
+
+/* =========================================================
+   APP LAYOUT - CORETAX TOP NAV
+========================================================= */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 16px 24px 28px;
+}
+
+/* Sidebar lama dijadikan top navbar */
+.sidebar {
+  position: sticky;
+  top: 14px;
+  z-index: 1000;
+
+  width: 100%;
+  min-height: 74px;
+  height: auto;
+
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 18px;
+
+  padding: 12px 18px;
+  overflow: visible;
+
+  color: var(--navy);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.sidebar::before {
+  display: none !important;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 8px;
+}
+
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.brand p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   NAV MENU
+========================================================= */
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  overflow: visible;
+}
+
+.menu button,
+.logout {
+  border: 0;
+  box-shadow: none;
+}
+
+.menu-icon {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.menu-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.menu-single,
+.menu-parent {
+  width: auto;
+  min-height: 42px;
+  height: 42px;
+  margin: 0;
+  padding: 0 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  color: var(--navy);
+  background: transparent;
+  border-radius: 8px;
+
+  font-size: 13px;
+  font-weight: 850;
+  text-align: left;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.menu-single:hover,
+.menu-parent:hover,
+.menu-single.active {
+  color: var(--navy);
+  background: var(--yellow-soft);
+  transform: none;
+}
+
+.menu-single.active {
+  border-bottom: 3px solid var(--yellow);
+}
+
+.menu-group {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu-parent b {
+  color: var(--muted);
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+
+.menu-group:hover .menu-parent b,
+.menu-group.open .menu-parent b {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.menu-sub {
+  position: absolute;
+  left: 0;
+  top: 48px;
+  z-index: 1200;
+
+  width: 245px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+
+  padding: 8px;
+  margin: 0;
+
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 18px 40px rgba(23, 36, 90, 0.16);
+}
+
+.menu-group:hover .menu-sub,
+.menu-group.open .menu-sub {
+  display: flex;
+}
+
+.menu-sub button {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--navy);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 750;
+  text-align: left;
+}
+
+.menu-sub button:hover,
+.menu-sub button.active {
+  color: var(--navy);
+  background: var(--yellow-soft);
+  transform: none;
+}
+
+/* User info kanan */
+.user-box {
+  min-width: 190px;
+  margin: 0;
+  padding: 9px 14px;
+  border-radius: 9px;
+
+  background: #f8fafd;
+  border: 1px solid var(--border);
+  color: var(--navy);
+  box-shadow: none;
+}
+
+.user-box small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.user-box strong {
+  display: block;
+  color: var(--navy);
+  font-size: 12px;
+  margin: 2px 0;
+}
+
+.user-box span {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 2px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: var(--navy);
+  background: var(--yellow-soft);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.logout {
+  position: static;
+  width: auto;
+  min-height: 42px;
+  margin: 0;
+  padding: 0 16px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--navy);
+  background: #f8fafd;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.logout:hover {
+  background: var(--yellow-soft);
+  transform: none;
+}
+
+/* Role hidden */
+.role-hidden,
+button[hidden],
+.menu-group[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* =========================================================
+   MAIN AREA
+========================================================= */
+
+.main {
+  width: min(1850px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding-bottom: 0;
+}
+
+.topbar {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+
+  padding: 26px 32px;
+  border-radius: 18px;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.96) 42%, rgba(239,244,255,0.82) 100%),
+    url("asset/banner.png") right center / auto 100% no-repeat;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  animation: slideDown 0.35s ease both;
+}
+
+.topbar-left {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.topbar h1,
+.topbar-left h1 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.topbar p,
+.topbar-left p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.page {
+  display: none;
+  gap: 22px;
+}
+
+.page.active {
+  display: grid;
+  gap: 22px;
+  align-items: start;
+  animation: fadeUp 0.35s ease both;
+}
+
+/* =========================================================
+   FORM, INPUT, BUTTON
+========================================================= */
+
+.input,
+.search {
+  width: 100%;
+  min-height: 42px;
+  padding: 11px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  outline: 0;
+  color: var(--navy);
+  background: #f8fafd;
+  box-shadow: none;
+}
+
+.input:focus,
+.search:focus {
+  background: #ffffff;
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(245, 196, 0, 0.18);
+}
+
+.search {
+  width: 300px;
+}
+
+.btn {
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 0 16px;
+  color: var(--navy);
+  background: #ffffff;
+  box-shadow: none;
+  font-weight: 900;
+}
+
+.btn:hover {
+  background: var(--yellow-soft);
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  color: var(--navy);
+  background: var(--yellow);
+  border-color: var(--yellow);
+}
+
+.btn-primary:hover {
+  background: #ffdc55;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.field label {
+  display: block;
+  margin: 0 0 8px 2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.field.full,
+.full {
+  grid-column: 1 / -1;
+}
+
+.form-action {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* =========================================================
+   SYNC CHIP
+========================================================= */
+
+.sync-chip {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.sync-chip span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #9aa7bf;
+}
+
+.sync-chip.online span {
+  background: var(--success);
+}
+
+.sync-chip.syncing span {
+  background: var(--warning);
+  animation: syncPulse 0.8s infinite alternate;
+}
+
+.sync-chip.offline span {
+  background: var(--danger);
+}
+
+/* =========================================================
+   HOME
+========================================================= */
+
+.home-pro {
+  display: grid;
+  gap: 18px;
+}
+
+.home-hero-pro {
+  min-height: 330px;
+  display: grid;
+  grid-template-columns: 1.45fr 0.75fr;
+  gap: 24px;
+  padding: 42px 48px;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 43%, rgba(239,244,255,0.76) 100%),
+    url("asset/banner.png") right center / auto 100% no-repeat;
+
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.home-hero-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.home-kicker {
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--yellow-soft);
+  color: var(--navy);
+  border-left: 4px solid var(--yellow);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.home-hero-text h1 {
+  max-width: 660px;
+  margin: 16px 0 10px;
+  color: var(--navy);
+  font-size: 38px;
+  line-height: 1.18;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+}
+
+.home-hero-text h1::after {
+  content: "";
+  display: block;
+  width: 142px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: var(--yellow);
+}
+
+.home-hero-text p {
+  max-width: 620px;
+  margin: 0;
+  color: #4d5875;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.home-hero-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.home-hero-actions button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9px;
+  font-weight: 900;
+}
+
+.home-hero-actions button:first-child {
+  color: #ffffff;
+  background: var(--navy);
+}
+
+.home-hero-actions button:nth-child(2) {
+  color: var(--navy);
+  background: var(--yellow);
+}
+
+.home-hero-panel {
+  display: grid;
+  gap: 14px;
+  align-content: center;
+}
+
+.home-system-card,
+.home-system-mini div {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+}
+
+.home-system-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.system-status-dot {
+  width: 16px;
+  height: 16px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 6px rgba(32, 178, 107, 0.14);
+}
+
+.home-system-card small {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.home-system-card strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--success);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.home-system-card span {
+  display: block;
+  color: #52617f;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.home-system-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.home-system-mini div {
+  padding: 16px;
+}
+
+.home-system-mini b {
+  display: block;
+  color: var(--navy);
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+.home-system-mini span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.home-card-panel,
+.home-info-card {
+  padding: 18px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.home-section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 14px;
+}
+
+.home-section-title h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.home-section-title p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.home-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.home-menu-grid button {
+  min-height: 108px;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #ffffff;
+  text-align: left;
+  box-shadow: none;
+}
+
+.home-menu-grid button:hover {
+  transform: translateY(-2px);
+  border-color: var(--yellow);
+  box-shadow: 0 12px 24px rgba(23, 36, 90, 0.10);
+}
+
+.home-card-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+}
+
+.home-card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.home-menu-grid strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--navy);
+  font-size: 14px;
+}
+
+.home-menu-grid small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.home-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.home-info-card h3 {
+  margin: 0 0 14px;
+  color: var(--navy);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.activity-list {
+  display: grid;
+  gap: 12px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf1f8;
+}
+
+.activity-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.activity-item > span {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--yellow);
+  color: var(--navy);
+  font-weight: 900;
+}
+
+.activity-item strong {
+  display: block;
+  color: var(--navy);
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.activity-item small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.home-info-list {
+  margin: 0;
+  padding-left: 18px;
+  color: #52617f;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   ROLE FOCUS PANEL
+========================================================= */
+
+.role-focus-panel {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+  max-width: 1060px;
+}
+
+.role-focus-card {
+  min-height: 104px;
+  padding: 15px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.role-focus-card.role-main {
+  background: var(--navy);
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.12);
+}
+
+.role-focus-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.role-main .role-focus-label {
+  color: rgba(255,255,255,0.68);
+}
+
+.role-focus-card h3 {
+  margin: 0 0 6px;
+  color: var(--navy);
+  font-size: 20px;
+  line-height: 1.15;
+}
+
+.role-main h3 {
+  color: var(--yellow);
+}
+
+.role-focus-card p {
+  margin: 0;
+  color: #63708c;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.role-main p {
+  color: rgba(255,255,255,0.78);
+}
+
+.role-focus-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 5px;
+}
+
+.role-focus-card li {
+  position: relative;
+  padding-left: 14px;
+  color: #52617f;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.role-focus-card li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
+/* =========================================================
+   DASHBOARD STATS & CHART
+========================================================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.stat-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 138px;
+  padding: 20px 18px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--yellow);
+}
+
+.stat-total::before {
+  background: linear-gradient(90deg, #1c2f6b, #39539a);
+}
+
+.stat-aktif::before {
+  background: linear-gradient(90deg, #17a95d, #4dd288);
+}
+
+.stat-inaktif::before {
+  background: linear-gradient(90deg, #e4a90d, #f7c948);
+}
+
+.stat-permanen::before {
+  background: linear-gradient(90deg, #6a5cff, #9687ff);
+}
+
+.stat-icon {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #fff6d8;
+}
+
+.stat-icon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.stat-content h3 {
+  margin: 0;
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--navy);
+  letter-spacing: -1px;
+}
+
+.stat-content p {
+  margin: 8px 0 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #6f7e9e;
+}
+
+.stat-content small {
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 650;
+  color: #9aa7bf;
+}
+
+.grid-2,
+.chart-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 22px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.panel {
+  padding: 22px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  animation: fadeUp 0.4s ease both;
+}
+
+.panel:hover {
+  border-color: rgba(245, 196, 0, 0.55);
+}
+
+.panel.dark {
+  color: #ffffff;
+  background: linear-gradient(145deg, #24336f, #101a43);
+}
+
+.panel-title h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.panel-title p {
+  margin: 5px 0 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.panel.dark .panel-title h2,
+.panel.dark .panel-title p {
+  color: #ffffff;
+}
+
+.chart-box {
+  height: 300px;
+  min-width: 0;
+  padding: 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f9fbff, #eef3ff);
+  border: 1px solid rgba(23, 36, 90, 0.08);
+  box-shadow: none;
+}
+
+.panel.dark .chart-box {
+  background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.10));
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+.hc-chart {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrap {
+  overflow: auto;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  max-height: 540px;
+  box-shadow: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+  font-size: 13px;
+}
+
+th,
+td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(23, 36, 90, 0.08);
+  text-align: left;
+  border-radius: 0;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--yellow-soft);
+  color: var(--navy);
+  font-weight: 900;
+}
+
+td {
+  background: #ffffff;
+}
+
+tbody tr:hover td {
+  background: #fffaf0;
+}
+
+.badge {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 900;
+  background: #f8fafd;
+}
+
+.badge.aktif {
+  color: var(--success);
+}
+
+.badge.inaktif {
+  color: var(--warning);
+}
+
+.badge.permanen {
+  color: var(--purple);
+}
+
+.badge.musnah {
+  color: var(--danger);
+}
+
+.mini-btn {
+  border: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--navy);
+  background: #eef3fb;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.mini-btn:hover {
+  background: var(--yellow-soft);
+}
+
+.action-group {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-return {
+  border: 0;
+  min-width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.btn-edit {
+  background: #0d6efd;
+}
+
+.btn-delete {
+  background: #dc3545;
+}
+
+.btn-return {
+  padding: 7px 10px;
+  background: var(--success);
+  font-size: 11px;
+}
+
+/* =========================================================
+   FILTER DATA ARSIP
+========================================================= */
+
+.archive-filter-box {
+  margin: 20px 0 18px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.archive-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.archive-filter-header h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.archive-filter-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.archive-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.archive-filter-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.archive-filter-grid label span {
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.archive-filter-grid select {
+  width: 100%;
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid #d8e0ef;
+  background: #f8fafd;
+  color: var(--navy);
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 750;
+  outline: none;
+}
+
+.archive-filter-grid select:focus {
+  border-color: var(--yellow);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(245, 196, 0, 0.16);
+}
+
+.btn-reset-filter {
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 16px;
+  color: var(--navy);
+  background: var(--yellow-soft);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.btn-reset-filter:hover {
+  background: var(--yellow);
+}
+
+/* =========================================================
+   USER / ROLE / MASTER FORMS
+========================================================= */
+
+.user-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.user-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-table-header h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.user-table-header p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.user-form-box {
+  display: none;
+  padding: 18px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.user-form-box.active {
+  display: block;
+  animation: fadeUp 0.3s ease both;
+}
+
+.user-table-wrap {
+  max-height: 420px;
+}
+
+.role-badge,
+.divisi-badge,
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.role-badge {
+  color: #ffffff;
+  background: #6c757d;
+}
+
+.divisi-badge {
+  color: #ffffff;
+  background: #13bde8;
+}
+
+.status-badge.aktif {
+  color: #0b7a4b;
+  background: #d9f8e9;
+}
+
+.status-badge.nonaktif {
+  color: #a30000;
+  background: #ffe0e0;
+}
+
+/* Tombol Tambah User/Role di header form tetap hidden sesuai style lama */
+.user-table-header .btn-primary {
+  display: none;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination-box {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination-box button {
+  min-width: 38px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--navy);
+  background: #eef2f8;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.pagination-box button:hover {
+  background: var(--yellow-soft);
+}
+
+.pagination-box button.active {
+  background: var(--yellow);
+}
+
+.pagination-box button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  margin-right: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+#archivePagination {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* =========================================================
+   MENU BANNER
+========================================================= */
+
+.menu-banner {
+  width: 100%;
+  min-height: 145px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  align-items: center;
+  gap: 26px;
+  padding: 18px 36px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-soft);
+}
+
+.menu-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.22), rgba(255,255,255,0.02));
+  pointer-events: none;
+}
+
+.menu-banner-illustration {
+  position: relative;
+  z-index: 2;
+  width: 230px;
+  height: 105px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.menu-banner-content {
+  position: relative;
+  z-index: 2;
+}
+
+.menu-banner-content h3 {
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.menu-banner-content p {
+  margin: 0;
+  color: rgba(23, 36, 90, 0.88);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.banner-dashboard,
+.banner-arsip,
+.banner-input,
+.banner-user,
+.banner-unit,
+.banner-kategori,
+.banner-retensi,
+.banner-peminjaman,
+.banner-laporan,
+.banner-pengaturan {
+  background: linear-gradient(90deg, #ffca2c, #ffd84d);
+}
+
+.banner-dashboard .menu-banner-illustration {
+  background-image: url("asset/banner-dashboard.png");
+}
+
+.banner-arsip .menu-banner-illustration {
+  background-image: url("asset/banner-arsip.png");
+}
+
+.banner-input .menu-banner-illustration {
+  background-image: url("asset/banner-input.png");
+}
+
+.banner-user .menu-banner-illustration {
+  background-image: url("asset/banner-user.png");
+}
+
+.banner-unit .menu-banner-illustration {
+  background-image: url("asset/banner-unit.png");
+}
+
+.banner-kategori .menu-banner-illustration {
+  background-image: url("asset/banner-kategori.png");
+}
+
+.banner-retensi .menu-banner-illustration {
+  background-image: url("asset/banner-retensi.png");
+}
+
+.banner-peminjaman .menu-banner-illustration {
+  background-image: url("asset/banner-peminjaman.png");
+}
+
+.banner-laporan .menu-banner-illustration {
+  background-image: url("asset/banner-laporan.png");
+}
+
+.banner-pengaturan .menu-banner-illustration {
+  background-image: url("asset/banner-pengaturan.png");
+}
+
+/* =========================================================
+   LOADER, TOAST, DELETE MODAL
+========================================================= */
+
+.loading-screen,
+.save-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: none;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(2px);
+}
+
+.save-loader {
+  z-index: 2000;
+  backdrop-filter: blur(3px);
+}
+
+.loading-card,
+.save-loader-card {
+  width: min(340px, 90%);
+  padding: 34px 30px;
+  border-radius: 12px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 5px solid var(--yellow);
+  box-shadow: 0 20px 45px rgba(23, 36, 90, 0.24);
+}
+
+.spinner,
+.save-spinner {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  border: 5px solid #e8edf7;
+  border-top-color: var(--yellow);
+  border-right-color: var(--navy);
+  animation: spinLoader 0.85s linear infinite;
+}
+
+.loading-card h3,
+.save-loader-card h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.loading-card p,
+.save-loader-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+body.is-loading .loading-screen,
+body.is-logout-loading .loading-screen,
+.save-loader.active {
+  display: grid !important;
+}
+
+body.is-loading .login-screen {
+  display: grid !important;
+  filter: blur(4px);
+  transform: scale(1.01);
+  pointer-events: none;
+}
+
+body.is-loading .app {
+  display: none !important;
+}
+
+body.is-logout-loading .app {
+  display: flex !important;
+  filter: blur(4px);
+  transform: scale(1.01);
+  pointer-events: none;
+}
+
+body.is-logout-loading .login-screen {
+  display: none !important;
+}
+
+/* Toast */
+.toast-notification {
+  position: fixed;
+  right: 28px;
+  top: 28px;
+  z-index: 2100;
+  min-width: 310px;
+  max-width: 420px;
+  display: none;
+  grid-template-columns: 42px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 10px;
+  background: #ffffff;
+  border-left: 5px solid var(--success);
+  box-shadow: 0 18px 40px rgba(23, 36, 90, 0.18);
+  animation: toastSlide 0.28s ease both;
+}
+
+.toast-notification.active {
+  display: grid;
+}
+
+.toast-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  font-weight: 900;
+  background: var(--success);
+}
+
+.toast-notification strong {
+  display: block;
+  margin: 0;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.toast-notification p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.toast-notification.warning {
+  border-left-color: var(--warning);
+}
+
+.toast-notification.warning .toast-icon {
+  background: var(--warning);
+}
+
+.toast-notification.error {
+  border-left-color: var(--danger);
+}
+
+.toast-notification.error .toast-icon {
+  background: var(--danger);
+}
+
+/* Delete modal */
+.delete-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2200;
+  display: none;
+  place-items: center;
+  background: rgba(10, 18, 45, 0.26);
+  backdrop-filter: blur(4px);
+}
+
+.delete-modal.active {
+  display: grid;
+}
+
+.delete-modal-card {
+  width: min(390px, 92%);
+  padding: 28px 26px;
+  border-radius: 12px;
+  text-align: center;
+  background: #ffffff;
+  border-top: 5px solid var(--danger);
+  box-shadow: 0 24px 55px rgba(23, 36, 90, 0.24);
+  animation: deletePop 0.25s ease both;
+}
+
+.delete-icon {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 16px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background: var(--danger);
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.delete-modal-card h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.delete-modal-card p {
+  margin: 9px 0 22px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.delete-modal-action {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn-delete-cancel,
+.btn-delete-confirm {
+  min-width: 120px;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.btn-delete-cancel {
+  color: var(--navy);
+  background: #eef2f8;
+}
+
+.btn-delete-confirm {
+  color: #ffffff;
+  background: var(--danger);
+}
+
+/* =========================================================
+   FOOTER - DINAMIS / TIDAK FIXED
+========================================================= */
+
+.app-footer {
+  position: static !important;
+  width: 100%;
+  margin: 18px 0 4px;
+  padding: 12px 0;
+  transform: none !important;
+
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+body.is-login .app-footer,
+body.is-loading .app-footer,
+body.is-logout-loading .app-footer {
+  display: none !important;
+}
+
+body.is-app .app-footer {
+  display: block;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1250px) {
+  .sidebar {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .menu {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .user-box,
+  .logout {
+    display: none;
+  }
+
+  .home-menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .role-focus-panel {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .home-hero-pro,
+  .home-bottom-grid,
+  .chart-section,
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .stats,
+  .archive-filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .app {
+    padding: 12px;
+  }
+
+  .sidebar {
+    position: relative;
+    top: 0;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .menu-single,
+  .menu-parent {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .menu-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu-sub {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    margin-top: 4px;
+  }
+
+  .topbar,
+  .home-hero-pro {
+    padding: 24px;
+  }
+
+  .home-hero-pro {
+    grid-template-columns: 1fr;
+  }
+
+  .top-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .form-grid,
+  #page-laporan .form-grid,
+  #page-pengaturan .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .menu-banner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 20px;
+  }
+
+  .menu-banner-illustration {
+    width: 180px;
+    height: 90px;
+  }
+
+  .menu-banner-content h3 {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 760px) {
+  .role-focus-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats,
+  .archive-filter-grid,
+  .home-system-mini {
+    grid-template-columns: 1fr;
+  }
+
+  .home-hero-text h1 {
+    font-size: 30px;
+  }
+
+  .home-menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-filter-header,
+  .user-table-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-reset-filter {
+    width: 100%;
+  }
+
+  .toast-notification {
+    left: 16px;
+    right: 16px;
+    top: 16px;
+    min-width: auto;
+  }
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes pageFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes loginZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes spinLoader {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes syncPulse {
+  from { opacity: 0.45; }
+  to { opacity: 1; }
+}
+
+@keyframes toastSlide {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes deletePop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* =========================================================
+   SAME BACKGROUND LOGIN & APP PAGE
+   Background login dan dashboard dibuat sama
+========================================================= */
+
+/* Background utama seluruh aplikasi */
+body {
+  background: url("asset/coretax.png") center center / cover no-repeat fixed !important;
+}
+
+/* Login pakai background yang sama */
+.login-screen {
+  background: url("asset/coretax.png") center center / cover no-repeat fixed !important;
+}
+
+/* Area aplikasi dibuat transparan agar background terlihat */
+.app {
+  background: transparent !important;
+}
+
+/* Main juga transparan */
+.main {
+  background: transparent !important;
+}
+
+/* Loading login/logout juga pakai background sama */
+.loading-screen,
+.save-loader {
+  background:
+    linear-gradient(
+      rgba(248, 250, 253, 0.72),
+      rgba(238, 243, 251, 0.72)
+    ),
+    url("asset/coretax.png") center center / cover no-repeat fixed !important;
+}
+
+/* Saat loading tetap ada blur tipis */
+body.is-loading .loading-screen,
+body.is-logout-loading .loading-screen,
+.save-loader.active {
+  backdrop-filter: blur(2px);
+}
+
+/* Card tetap putih agar konten terbaca */
+.sidebar,
+.topbar,
+.panel,
+.home-hero-pro,
+.home-card-panel,
+.home-info-card,
+.stat-card,
+.archive-filter-box,
+.table-wrap,
+.user-form-box {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(8px);
+}
+
+/* =========================================================
+   SIARDI ARCHIVE HOME - CORETAX STYLE
+========================================================= */
+
+.archive-home {
+  display: grid;
+  gap: 18px;
+}
+
+/* HERO */
+.archive-hero {
+  position: relative;
+  min-height: 360px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr 0.55fr;
+  align-items: center;
+  gap: 26px;
+
+  padding: 42px 48px;
+  border-radius: 18px;
+  overflow: hidden;
+
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.96) 46%, rgba(239,244,255,0.82) 100%),
+    url("asset/coretax.png") center center / cover no-repeat;
+
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 14px 34px rgba(23, 36, 90, 0.10);
+}
+
+.archive-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -80px -110px auto;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: rgba(245, 196, 0, 0.12);
+  pointer-events: none;
+}
+
+.archive-hero-text {
+  position: relative;
+  z-index: 2;
+}
+
+.archive-welcome {
+  margin: 0 0 12px;
+  color: #26346f;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.archive-hero-text h1 {
+  max-width: 650px;
+  margin: 0;
+  color: #17245a;
+  font-size: 38px;
+  line-height: 1.18;
+  letter-spacing: -0.045em;
+  font-weight: 950;
+}
+
+.archive-title-line {
+  width: 146px;
+  height: 4px;
+  margin: 16px 0 20px;
+  border-radius: 999px;
+  background: #f5c400;
+}
+
+.archive-hero-desc {
+  max-width: 560px;
+  margin: 0;
+  color: #53607c;
+  font-size: 15px;
+  line-height: 1.75;
+  font-weight: 600;
+}
+
+.archive-hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.archive-hero-actions button {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.archive-hero-actions button:first-child {
+  color: #ffffff;
+  background: #17245a;
+  box-shadow: 0 8px 18px rgba(23, 36, 90, 0.16);
+}
+
+.archive-hero-actions button:nth-child(2) {
+  color: #17245a;
+  background: #f5c400;
+  box-shadow: 0 8px 18px rgba(245, 196, 0, 0.20);
+}
+
+.archive-hero-actions button:hover {
+  transform: translateY(-2px);
+}
+
+/* VISUAL */
+.archive-hero-visual {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+}
+
+.archive-visual-card {
+  position: relative;
+  width: 420px;
+  height: 250px;
+}
+
+.archive-folder {
+  position: absolute;
+  left: 40px;
+  bottom: 28px;
+  z-index: 4;
+  width: 190px;
+  height: 96px;
+  padding: 30px 20px 16px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #17245a, #23336e);
+  box-shadow: 0 18px 34px rgba(23, 36, 90, 0.22);
+}
+
+.archive-folder::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -18px;
+  width: 90px;
+  height: 28px;
+  border-radius: 10px 10px 0 0;
+  background: #f5c400;
+}
+
+.archive-folder span {
+  display: block;
+  color: #f5c400;
+  font-size: 25px;
+  font-weight: 950;
+  letter-spacing: 0.02em;
+}
+
+.archive-folder small {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255,255,255,0.78);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.archive-doc {
+  position: absolute;
+  width: 72px;
+  height: 96px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 10px 24px rgba(23, 36, 90, 0.10);
+}
+
+.archive-doc::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 18px;
+  width: 44px;
+  height: 7px;
+  border-radius: 999px;
+  background: #f5c400;
+}
+
+.archive-doc::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 36px;
+  width: 34px;
+  height: 7px;
+  border-radius: 999px;
+  background: #dbe3f2;
+}
+
+.doc-1 {
+  left: 86px;
+  top: 32px;
+  transform: rotate(-10deg);
+}
+
+.doc-2 {
+  left: 158px;
+  top: 10px;
+  transform: rotate(6deg);
+}
+
+.doc-3 {
+  left: 230px;
+  top: 40px;
+  transform: rotate(-4deg);
+}
+
+.archive-monitor {
+  position: absolute;
+  right: 10px;
+  bottom: 34px;
+  width: 180px;
+  height: 126px;
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.92);
+  border: 8px solid #26346f;
+  box-shadow: 0 20px 34px rgba(23, 36, 90, 0.18);
+}
+
+.archive-monitor div {
+  height: 18px;
+  border-radius: 7px;
+  margin-bottom: 10px;
+  background: #eef3fb;
+}
+
+.archive-monitor div:nth-child(2) {
+  width: 72%;
+}
+
+.archive-monitor div:nth-child(3) {
+  width: 52%;
+  background: #f5c400;
+}
+
+/* STATUS BOX */
+.archive-status-box {
+  position: relative;
+  z-index: 2;
+  min-height: 240px;
+  padding: 22px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 12px 28px rgba(23, 36, 90, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.archive-status-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e8edf5;
+}
+
+.archive-status-head strong {
+  color: #17245a;
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.archive-status-head span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #15945a;
+  background: #dff8eb;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.archive-status-head span::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #20b26b;
+}
+
+.archive-status-list {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.archive-status-list small {
+  display: block;
+  margin-bottom: 5px;
+  color: #7a849b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.archive-status-list b {
+  color: #17245a;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.archive-progress {
+  width: 100%;
+  height: 7px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e7ecf5;
+}
+
+.archive-progress i {
+  display: block;
+  width: 45%;
+  height: 100%;
+  border-radius: 999px;
+  background: #17245a;
+}
+
+/* STATS */
+.archive-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.archive-stat-card {
+  position: relative;
+  min-height: 126px;
+  display: grid;
+  grid-template-columns: 56px 1fr 34px;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 8px 22px rgba(23, 36, 90, 0.07);
+}
+
+.archive-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(23, 36, 90, 0.11);
+}
+
+.archive-stat-icon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 950;
+}
+
+.archive-stat-icon.navy {
+  color: #ffffff;
+  background: #17245a;
+}
+
+.archive-stat-icon.green {
+  color: #ffffff;
+  background: #20b26b;
+}
+
+.archive-stat-icon.yellow {
+  color: #17245a;
+  background: #f5c400;
+}
+
+.archive-stat-icon.purple {
+  color: #ffffff;
+  background: #7c63dc;
+}
+
+.archive-stat-card small {
+  display: block;
+  color: #17245a;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.archive-stat-card strong {
+  display: block;
+  margin: 4px 0 3px;
+  color: #17245a;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 950;
+}
+
+.archive-stat-card p {
+  margin: 0;
+  color: #66708a;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.archive-stat-card button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #dce4f0;
+  border-radius: 50%;
+  color: #17245a;
+  background: #ffffff;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.archive-stat-card button:hover {
+  background: #fff5cf;
+}
+
+/* BOTTOM */
+.archive-home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.archive-home-panel {
+  min-height: 350px;
+  padding: 24px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 8px 22px rgba(23, 36, 90, 0.07);
+}
+
+.archive-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.archive-panel-head h2 {
+  margin: 0;
+  color: #17245a;
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.archive-panel-head button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid #dce4f0;
+  border-radius: 8px;
+  color: #17245a;
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.archive-activity-list {
+  display: grid;
+  gap: 0;
+}
+
+.archive-activity-item {
+  display: grid;
+  grid-template-columns: 42px 1fr 80px;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 0;
+  border-bottom: 1px solid #edf1f8;
+}
+
+.archive-activity-item:last-child {
+  border-bottom: 0;
+}
+
+.archive-activity-item > span {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 15px;
+}
+
+.act-blue {
+  background: #e8f0ff;
+}
+
+.act-green {
+  background: #e1f8ec;
+}
+
+.act-yellow {
+  background: #fff4cf;
+}
+
+.act-purple {
+  background: #eee9ff;
+}
+
+.archive-activity-item strong {
+  display: block;
+  color: #17245a;
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.archive-activity-item p {
+  margin: 0;
+  color: #66708a;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.archive-activity-item small {
+  justify-self: end;
+  color: #4d5875;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* CHART PREVIEW */
+.archive-chart-preview {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  align-items: center;
+  gap: 20px;
+  min-height: 270px;
+}
+
+.donut-preview {
+  width: 230px;
+  height: 230px;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #ffffff 0 42%, transparent 43%),
+    conic-gradient(
+      #17245a 0 35%,
+      #79a7f2 35% 60%,
+      #f5c400 60% 80%,
+      #20b26b 80% 92%,
+      #7c63dc 92% 100%
+    );
+  box-shadow: 0 12px 28px rgba(23, 36, 90, 0.08);
+}
+
+.donut-preview div {
+  text-align: center;
+}
+
+.donut-preview strong {
+  display: block;
+  color: #17245a;
+  font-size: 28px;
+  font-weight: 950;
+}
+
+.donut-preview small {
+  color: #66708a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.chart-legend-preview {
+  display: grid;
+  gap: 14px;
+}
+
+.chart-legend-preview div {
+  display: grid;
+  grid-template-columns: 14px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  color: #17245a;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.chart-legend-preview span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.chart-legend-preview b {
+  color: #53607c;
+  font-size: 12px;
+}
+
+.lg-navy {
+  background: #17245a;
+}
+
+.lg-yellow {
+  background: #f5c400;
+}
+
+.lg-purple {
+  background: #7c63dc;
+}
+
+.lg-red {
+  background: #d93f45;
+}
+
+/* RESPONSIVE HOME */
+@media (max-width: 1300px) {
+  .archive-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-hero-visual {
+    display: none;
+  }
+
+  .archive-status-box {
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .archive-stat-grid,
+  .archive-home-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .archive-chart-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .archive-hero {
+    padding: 28px;
+  }
+
+  .archive-hero-text h1 {
+    font-size: 30px;
+  }
+
+  .archive-stat-grid,
+  .archive-home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-stat-card {
+    grid-template-columns: 52px 1fr;
+  }
+
+  .archive-stat-card button {
+    display: none;
+  }
+
+  .archive-activity-item {
+    grid-template-columns: 38px 1fr;
+  }
+
+  .archive-activity-item small {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* =========================================================
+   RUNNING TEXT TANPA PUTUS / SEAMLESS LOOP
+========================================================= */
+
+.archive-running-info {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 42px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+
+  padding: 0 12px !important;
+  border-radius: 9px !important;
+  background: rgba(248, 250, 253, 0.92) !important;
+  border: 1px solid #dfe6f1 !important;
+  overflow: hidden !important;
+}
+
+.archive-running-badge {
+  height: 26px !important;
+  padding: 0 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  border-radius: 999px !important;
+
+  color: #17245a !important;
+  background: #fff5cf !important;
+  font-size: 10px !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+  z-index: 2;
+}
+
+.archive-running-mask {
+  flex: 1 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+.archive-running-track {
+  display: flex !important;
+  width: max-content !important;
+  white-space: nowrap !important;
+  will-change: transform;
+  animation: archiveTickerSeamless 28s linear infinite !important;
+}
+
+.archive-running-group {
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 46px !important;
+  padding-right: 46px !important;
+  white-space: nowrap !important;
+}
+
+.archive-running-group span {
+  color: #17245a !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  white-space: nowrap !important;
+}
+
+.archive-running-group span::before {
+  content: "•";
+  margin-right: 10px;
+  color: #f5c400;
+  font-weight: 950;
+}
+
+.archive-running-info:hover .archive-running-track {
+  animation-play-state: paused !important;
+}
+
+@keyframes archiveTickerSeamless {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* =========================================================
+   LOADING BLUR MODE
+   Login dan halaman app tidak hilang, hanya blur
+========================================================= */
+
+/* Overlay loading transparan, tidak menutup background */
+.loading-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 3000 !important;
+
+  display: none !important;
+  place-items: center !important;
+
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: none !important;
+}
+
+/* Saat login loading: login tetap tampil, hanya blur */
+body.is-loading .login-screen {
+  display: grid !important;
+  filter: blur(4px) !important;
+  transform: scale(1.01) !important;
+  pointer-events: none !important;
+}
+
+/* Saat login loading: app tetap tidak tampil */
+body.is-loading .app {
+  display: none !important;
+}
+
+/* Saat logout loading: app tetap tampil, hanya blur */
+body.is-logout-loading .app {
+  display: flex !important;
+  filter: blur(4px) !important;
+  transform: scale(1.01) !important;
+  pointer-events: none !important;
+}
+
+/* Saat logout loading: login jangan tampil dulu */
+body.is-logout-loading .login-screen {
+  display: none !important;
+}
+
+/* Loading card saja yang tampil di atas */
+body.is-loading .loading-screen,
+body.is-logout-loading .loading-screen {
+  display: grid !important;
+}
+
+/* Card loading tetap jelas */
+.loading-card {
+  position: relative !important;
+  z-index: 3001 !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-top: 5px solid #f5c400 !important;
+  box-shadow: 0 24px 55px rgba(23, 36, 90, 0.24) !important;
+}
+
+/* =========================================================
+   COREARSIP PORTAL ADD-ON
+   Shortcut layanan, panduan, notifikasi, security notice
+========================================================= */
+
+/* Security note login */
+.login-security-note {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  margin-top: 14px;
+  padding: 11px 12px;
+  border-radius: 9px;
+  background: #f8fafd;
+  border: 1px solid #e5eaf3;
+}
+
+.login-security-note span {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.login-security-note p {
+  margin: 0;
+  color: #53607c;
+  font-size: 11.5px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+/* Section layanan */
+.core-service-section {
+  padding: 22px 24px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 8px 22px rgba(23, 36, 90, 0.07);
+  backdrop-filter: blur(8px);
+}
+
+.core-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.core-section-head h2,
+.core-panel-title h2 {
+  margin: 0;
+  color: #17245a;
+  font-size: 19px;
+  font-weight: 950;
+}
+
+.core-section-head p,
+.core-panel-title p {
+  margin: 5px 0 0;
+  color: #66708a;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 650;
+}
+
+.core-service-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.core-service-grid button {
+  min-height: 132px;
+  padding: 18px 16px;
+  border-radius: 13px;
+  border: 1px solid #e5eaf3;
+  background: #ffffff;
+  text-align: left;
+  box-shadow: none;
+}
+
+.core-service-grid button:hover {
+  transform: translateY(-3px);
+  border-color: #f5c400;
+  background: #fffdf4;
+  box-shadow: 0 14px 28px rgba(23, 36, 90, 0.10);
+}
+
+.core-service-grid button span {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 14px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: #17245a;
+  background: #fff5cf;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.core-service-grid button strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #17245a;
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.core-service-grid button small {
+  display: block;
+  color: #66708a;
+  font-size: 11.5px;
+  line-height: 1.5;
+  font-weight: 650;
+}
+
+/* Panduan dan notifikasi */
+.core-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.core-info-panel {
+  min-height: 290px;
+  padding: 24px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 8px 22px rgba(23, 36, 90, 0.07);
+  backdrop-filter: blur(8px);
+}
+
+.core-panel-title {
+  margin-bottom: 18px;
+}
+
+.core-guide-list {
+  display: grid;
+  gap: 13px;
+}
+
+.core-guide-list div {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  align-items: start;
+  gap: 13px;
+  padding: 13px 0;
+  border-bottom: 1px solid #edf1f8;
+}
+
+.core-guide-list div:last-child {
+  border-bottom: 0;
+}
+
+.core-guide-list b {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: #17245a;
+  background: #f5c400;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.core-guide-list span {
+  color: #53607c;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+.core-notification-list {
+  display: grid;
+  gap: 13px;
+}
+
+.core-notif-item {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  align-items: start;
+  gap: 13px;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #edf1f8;
+  background: #ffffff;
+}
+
+.core-notif-item > span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.core-notif-item.warning > span {
+  color: #17245a;
+  background: #fff5cf;
+}
+
+.core-notif-item.danger > span {
+  color: #ffffff;
+  background: #d93f45;
+}
+
+.core-notif-item.info > span {
+  color: #ffffff;
+  background: #17245a;
+}
+
+.core-notif-item strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #17245a;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.core-notif-item small {
+  display: block;
+  color: #66708a;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+/* Responsive */
+@media (max-width: 1300px) {
+  .core-service-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .core-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .core-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .core-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .core-service-section,
+  .core-info-panel {
+    padding: 18px;
+  }
+}
+
+/* =========================================================
+   SAVE / DELETE LOADING BLUR MODE
+   Halaman tidak hilang, hanya blur
+========================================================= */
+
+/* Overlay simpan/hapus dibuat transparan */
+.save-loader {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 3200 !important;
+
+  display: none !important;
+  place-items: center !important;
+
+  background: rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: none !important;
+}
+
+/* Saat loader aktif */
+.save-loader.active {
+  display: grid !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  backdrop-filter: none !important;
+}
+
+/* Saat simpan/hapus di halaman aplikasi */
+body.is-save-loading.is-app .app {
+  display: flex !important;
+  filter: blur(4px) !important;
+  transform: scale(1.01) !important;
+  pointer-events: none !important;
+}
+
+/* Kalau suatu saat save loader muncul di login */
+body.is-save-loading.is-login .login-screen {
+  display: grid !important;
+  filter: blur(4px) !important;
+  transform: scale(1.01) !important;
+  pointer-events: none !important;
+}
+
+/* Card loader tetap tajam */
+.save-loader-card {
+  position: relative !important;
+  z-index: 3201 !important;
+  width: min(340px, 90%) !important;
+  padding: 34px 30px !important;
+  border-radius: 12px !important;
+  text-align: center !important;
+
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-top: 5px solid #f5c400 !important;
+  box-shadow: 0 24px 55px rgba(23, 36, 90, 0.24) !important;
+}
+
+/* Spinner tetap terlihat jelas */
+.save-spinner {
+  width: 54px !important;
+  height: 54px !important;
+  margin: 0 auto 18px !important;
+  border-radius: 50% !important;
+  border: 5px solid #e8edf7 !important;
+  border-top-color: #f5c400 !important;
+  border-right-color: #17245a !important;
+  animation: spinLoader 0.85s linear infinite !important;
+}
+
+/* =========================================================
+   CORETAX STYLE - KARTU LAYANAN BESAR COREARSIP
+========================================================= */
+
+.coretax-service-section {
+  padding: 26px 28px 30px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 10px 28px rgba(23, 36, 90, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.coretax-service-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.coretax-service-head span {
+  display: inline-flex;
+  margin-bottom: 7px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #17245a;
+  background: #fff5cf;
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+.coretax-service-head h2 {
+  margin: 0;
+  color: #17245a;
+  font-size: 24px;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+}
+
+.coretax-service-head p {
+  margin: 6px 0 0;
+  color: #66708a;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+.coretax-service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.coretax-service-card {
+  position: relative;
+  min-height: 156px;
+  padding: 22px 20px;
+  border-radius: 15px;
+  border: 1px solid #e5eaf3;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(23, 36, 90, 0.06);
+
+  display: grid;
+  grid-template-columns: 52px 1fr 28px;
+  align-items: start;
+  gap: 15px;
+
+  text-align: left;
+  overflow: hidden;
+}
+
+.coretax-service-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 5px;
+  background: #f5c400;
+  opacity: 0;
+  transition: 0.22s ease;
+}
+
+.coretax-service-card:hover {
+  transform: translateY(-4px);
+  border-color: #f5c400;
+  background: #fffdf4;
+  box-shadow: 0 16px 34px rgba(23, 36, 90, 0.12);
+}
+
+.coretax-service-card:hover::before {
+  opacity: 1;
+}
+
+.coretax-service-card.featured {
+  grid-column: span 2;
+  min-height: 184px;
+  background:
+    linear-gradient(135deg, rgba(23, 36, 90, 0.96), rgba(35, 51, 110, 0.96));
+  border-color: rgba(23, 36, 90, 0.18);
+}
+
+.coretax-service-card.featured.yellow {
+  background:
+    linear-gradient(135deg, #f5c400, #ffdc55);
+  border-color: #f5c400;
+}
+
+.coretax-service-card .service-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: #17245a;
+  background: #fff5cf;
+  font-size: 23px;
+  font-weight: 950;
+}
+
+.coretax-service-card.featured .service-icon {
+  color: #17245a;
+  background: #f5c400;
+}
+
+.coretax-service-card.featured.yellow .service-icon {
+  color: #ffffff;
+  background: #17245a;
+}
+
+.coretax-service-card strong {
+  display: block;
+  margin: 2px 0 8px;
+  color: #17245a;
+  font-size: 16px;
+  font-weight: 950;
+  line-height: 1.25;
+}
+
+.coretax-service-card small {
+  display: block;
+  max-width: 360px;
+  color: #66708a;
+  font-size: 12px;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+.coretax-service-card.featured strong {
+  color: #ffffff;
+  font-size: 21px;
+}
+
+.coretax-service-card.featured small {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 13px;
+}
+
+.coretax-service-card.featured.yellow strong {
+  color: #17245a;
+}
+
+.coretax-service-card.featured.yellow small {
+  color: rgba(23, 36, 90, 0.76);
+}
+
+.coretax-service-card i {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #17245a;
+  background: #f8fafd;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.coretax-service-card.featured i {
+  color: #17245a;
+  background: #ffffff;
+}
+
+.coretax-service-card.featured.yellow i {
+  color: #ffffff;
+  background: #17245a;
+}
+
+/* Responsive */
+@media (max-width: 1300px) {
+  .coretax-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .coretax-service-card.featured {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .coretax-service-section {
+    padding: 20px;
+  }
+
+  .coretax-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .coretax-service-card,
+  .coretax-service-card.featured {
+    min-height: 145px;
+    grid-template-columns: 48px 1fr;
+  }
+
+  .coretax-service-card i {
+    display: none;
+  }
+
+  .coretax-service-card .service-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .coretax-service-card.featured strong {
+    font-size: 18px;
+  }
+}
+
+/* =========================================================
+   HIDE TOPBAR KHUSUS MENU HOME
+========================================================= */
+
+/* Supaya jarak atas Home tidak terlalu kosong */
+body.is-home-page .main {
+  gap: 18px !important;
+}
+
+/* Menu selain Home tetap tampil normal */
+body:not(.is-home-page) #mainTopbar {
+  display: grid !important;
+}
+
+/* =========================================================
+   HOME SEARCH BOX
+========================================================= */
+
+.home-search-box {
+  width: min(520px, 100%);
+  min-height: 46px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.home-search-box input {
+  width: 100%;
+  height: 46px;
+  padding: 0 15px;
+  border-radius: 9px;
+  border: 1px solid #dfe6f1;
+  outline: none;
+
+  color: #17245a;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.home-search-box input:focus {
+  border-color: #f5c400;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(245, 196, 0, 0.18);
+}
+
+.home-search-box button {
+  height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9px;
+
+  color: #17245a;
+  background: #f5c400;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.home-search-box button:hover {
+  background: #ffdc55;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .home-search-box {
+    grid-template-columns: 1fr;
+  }
+
+  .home-search-box button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   HIDE HEADER / TOPBAR KHUSUS MENU HOME
+========================================================= */
+
+html body #mainTopbar.home-topbar-hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Saat bukan Home, header tetap normal */
+html body:not(.is-home-page) #mainTopbar {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* =========================================================
+   HILANGKAN TOPBAR KHUSUS HOME
+========================================================= */
+
+body.is-home-page #mainTopbar,
+body.is-home-page header.topbar {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+/* Menu selain Home tetap tampil */
+body:not(.is-home-page) #mainTopbar {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* =========================================================
+   SUBMENU AUTO HIDE FIX
+========================================================= */
+
+.menu-group {
+  position: relative;
+}
+
+/* Saat hover atau sedang open */
+.menu-group:hover .menu-sub,
+.menu-group.open .menu-sub {
+  display: flex !important;
+}
+
+/* Biar dropdown tidak tertahan aneh */
+.menu-sub {
+  pointer-events: auto !important;
+}
+
+/* =========================================================
+   SETTINGS PAGE - COREARSIP
+========================================================= */
+
+.settings-panel {
+  display: grid;
+  gap: 20px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.settings-card {
+  padding: 22px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 8px 22px rgba(23, 36, 90, 0.07);
+}
+
+.settings-card h3 {
+  margin: 0;
+  color: #17245a;
+  font-size: 17px;
+  font-weight: 950;
+}
+
+.settings-card p {
+  margin: 6px 0 18px;
+  color: #66708a;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+.settings-action-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-danger-soft {
+  color: #d93f45 !important;
+  background: #ffe7e7 !important;
+  border-color: #ffd0d0 !important;
+}
+
+.btn-danger-soft:hover {
+  background: #ffdada !important;
+}
+
+.settings-save-action {
+  margin-top: 0;
+  padding-top: 4px;
+}
+
+/* Mode card dari pengaturan */
+body.card-mode-glass .panel,
+body.card-mode-glass .archive-home-panel,
+body.card-mode-glass .archive-stat-card,
+body.card-mode-glass .core-info-panel,
+body.card-mode-glass .coretax-service-section,
+body.card-mode-glass .settings-card {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+body.card-mode-solid .panel,
+body.card-mode-solid .archive-home-panel,
+body.card-mode-solid .archive-stat-card,
+body.card-mode-solid .core-info-panel,
+body.card-mode-solid .coretax-service-section,
+body.card-mode-solid .settings-card {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+}
+
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   LOGIN SECURITY NOTICE - MODERN PREMIUM
+========================================================= */
+
+.login-security-note {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  align-items: center;
+  gap: 12px;
+
+  margin-top: 16px;
+  padding: 13px 14px;
+
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 230, 0.96), rgba(248, 250, 253, 0.96));
+  border: 1px solid rgba(245, 196, 0, 0.32);
+  box-shadow:
+    0 10px 24px rgba(23, 36, 90, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+
+  overflow: hidden;
+}
+
+.login-security-note::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 4px;
+  border-radius: 999px;
+  background: #f5c400;
+}
+
+.security-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+  background: linear-gradient(145deg, #17245a, #24336f);
+  color: #f5c400;
+  font-size: 18px;
+  box-shadow: 0 8px 18px rgba(23, 36, 90, 0.18);
+}
+
+.security-text {
+  min-width: 0;
+}
+
+.security-text strong {
+  display: block;
+  margin-bottom: 3px;
+
+  color: #17245a;
+  font-size: 12.5px;
+  font-weight: 950;
+  letter-spacing: -0.01em;
+}
+
+.security-text p {
+  margin: 0;
+
+  color: #66708a;
+  font-size: 11.5px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+/* Hilangkan style lama kalau masih terbawa */
+.login-security-note > span {
+  display: none !important;
+}
+
+/* Mobile */
+@media (max-width: 420px) {
+  .login-security-note {
+    grid-template-columns: 36px 1fr;
+    padding: 12px;
+  }
+
+  .security-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .security-text strong {
+    font-size: 12px;
+  }
+
+  .security-text p {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================
+   HOME HERO WITH RIGHT SIDE SLIDER
+   Kiri tetap teks, kanan diganti slide foto
+========================================================= */
+
+.archive-hero {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr) !important;
+  min-height: 390px !important;
+  padding: 34px 42px !important;
+  gap: 34px !important;
+}
+
+/* Pastikan elemen kanan lama tidak tampil kalau masih tersisa */
+.archive-hero-visual,
+.archive-status-box {
+  display: none !important;
+}
+
+/* Slider kanan */
+.archive-hero-slider {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  height: 315px;
+
+  border-radius: 16px;
+  overflow: hidden;
+
+  background: #ffffff;
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 14px 34px rgba(23, 36, 90, 0.12);
+}
+
+/* Slide */
+.archive-hero-slider .home-slide {
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.015);
+
+  transition:
+    opacity 0.55s ease,
+    visibility 0.55s ease,
+    transform 0.55s ease;
+}
+
+.archive-hero-slider .home-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.archive-hero-slider .home-slide img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Tombol slide */
+.archive-hero-slider .home-slide-nav {
+  position: absolute;
+  top: 50%;
+  z-index: 6;
+
+  width: 34px;
+  height: 34px;
+
+  border: 0;
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  color: #17245a;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 18px rgba(23, 36, 90, 0.16);
+
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+
+  transform: translateY(-50%);
+}
+
+.archive-hero-slider .home-slide-nav:hover {
+  background: #f5c400;
+}
+
+.archive-hero-slider .home-slide-nav.prev {
+  left: 14px;
+}
+
+.archive-hero-slider .home-slide-nav.next {
+  right: 14px;
+}
+
+/* Dot slide */
+.archive-hero-slider .home-slide-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  z-index: 7;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 10px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+
+  transform: translateX(-50%);
+}
+
+.archive-hero-slider .home-slide-dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(23, 36, 90, 0.28);
+}
+
+.archive-hero-slider .home-slide-dots button.active {
+  width: 26px;
+  background: #f5c400;
+}
+
+/* Teks kiri dibuat tetap proporsional */
+.archive-hero-text h1 {
+  font-size: 36px !important;
+  max-width: 620px !important;
+}
+
+.archive-hero-desc {
+  max-width: 560px !important;
+}
+
+/* Search agar tidak terlalu panjang */
+.home-search-box {
+  width: min(520px, 100%) !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .archive-hero {
+    grid-template-columns: 1fr !important;
+  }
+
+  .archive-hero-slider {
+    height: 330px;
+  }
+}
+
+@media (max-width: 760px) {
+  .archive-hero {
+    padding: 26px !important;
+  }
+
+  .archive-hero-slider {
+    height: 240px;
+    border-radius: 14px;
+  }
+
+  .archive-hero-text h1 {
+    font-size: 30px !important;
+  }
+
+  .archive-hero-slider .home-slide-nav {
+    width: 30px;
+    height: 30px;
+    font-size: 21px;
+  }
+}
+
+/* =========================================================
+   FIX HOME HERO PRESISI - LEFT TEXT + RIGHT SLIDER
+========================================================= */
+
+.archive-hero.archive-hero-with-slider {
+  display: grid !important;
+  grid-template-columns: minmax(420px, 0.82fr) minmax(620px, 1.18fr) !important;
+  align-items: center !important;
+  gap: 42px !important;
+
+  min-height: 460px !important;
+  padding: 44px 48px !important;
+
+  border-radius: 18px !important;
+  overflow: hidden !important;
+}
+
+/* Kiri dibuat sejajar tengah */
+.archive-hero-with-slider .archive-hero-text {
+  align-self: center !important;
+  max-width: 620px !important;
+  z-index: 3 !important;
+}
+
+/* Judul kiri lebih proporsional */
+.archive-hero-with-slider .archive-hero-text h1 {
+  max-width: 620px !important;
+  font-size: 36px !important;
+  line-height: 1.18 !important;
+}
+
+/* Deskripsi kiri */
+.archive-hero-with-slider .archive-hero-desc {
+  max-width: 560px !important;
+}
+
+/* Search kiri */
+.archive-hero-with-slider .home-search-box {
+  width: min(540px, 100%) !important;
+  margin-top: 24px !important;
+}
+
+/* Tombol kiri */
+.archive-hero-with-slider .archive-hero-actions {
+  margin-top: 22px !important;
+}
+
+/* Kanan slider */
+.archive-hero-slider {
+  position: relative !important;
+  z-index: 3 !important;
+
+  width: 100% !important;
+  max-width: 980px !important;
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+
+  justify-self: end !important;
+  align-self: center !important;
+
+  border-radius: 16px !important;
+  overflow: hidden !important;
+
+  background: #ffffff !important;
+  border: 1px solid #e5eaf3 !important;
+  box-shadow: 0 16px 36px rgba(23, 36, 90, 0.14) !important;
+}
+
+/* Slide */
+.archive-hero-slider .home-slide {
+  position: absolute !important;
+  inset: 0 !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: scale(1.01) !important;
+
+  transition:
+    opacity 0.55s ease,
+    visibility 0.55s ease,
+    transform 0.55s ease !important;
+}
+
+.archive-hero-slider .home-slide.active {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: scale(1) !important;
+}
+
+/* Gambar tampil utuh seperti file asli */
+.archive-hero-slider .home-slide img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  background: #ffffff !important;
+}
+
+/* Buang elemen kanan lama kalau masih ada */
+.archive-hero-visual,
+.archive-status-box,
+.archive-status-head,
+.archive-status-list {
+  display: none !important;
+}
+
+/* Tombol navigasi slider */
+.archive-hero-slider .home-slide-nav {
+  position: absolute !important;
+  top: 50% !important;
+  z-index: 8 !important;
+
+  width: 34px !important;
+  height: 34px !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  color: #17245a !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+  box-shadow: 0 8px 18px rgba(23, 36, 90, 0.16) !important;
+
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+
+  transform: translateY(-50%) !important;
+}
+
+.archive-hero-slider .home-slide-nav:hover {
+  background: #f5c400 !important;
+}
+
+.archive-hero-slider .home-slide-nav.prev {
+  left: 14px !important;
+}
+
+.archive-hero-slider .home-slide-nav.next {
+  right: 14px !important;
+}
+
+/* Dots */
+.archive-hero-slider .home-slide-dots {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 14px !important;
+  z-index: 9 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+
+  padding: 7px 10px !important;
+  border-radius: 999px !important;
+
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(8px) !important;
+
+  transform: translateX(-50%) !important;
+}
+
+.archive-hero-slider .home-slide-dots button {
+  width: 8px !important;
+  height: 8px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(23, 36, 90, 0.28) !important;
+}
+
+.archive-hero-slider .home-slide-dots button.active {
+  width: 26px !important;
+  background: #f5c400 !important;
+}
+
+/* Responsive */
+@media (max-width: 1250px) {
+  .archive-hero.archive-hero-with-slider {
+    grid-template-columns: 1fr !important;
+    min-height: auto !important;
+  }
+
+  .archive-hero-slider {
+    justify-self: stretch !important;
+    max-width: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .archive-hero.archive-hero-with-slider {
+    padding: 26px !important;
+    gap: 26px !important;
+  }
+
+  .archive-hero-with-slider .archive-hero-text h1 {
+    font-size: 30px !important;
+  }
+
+  .archive-hero-slider {
+    border-radius: 14px !important;
+  }
+}
+
+/* =========================================================
+   EXPORT BUTTON - DATA ARSIP
+========================================================= */
+
+.archive-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-export-excel,
+.btn-export-pdf {
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 15px;
+  font-size: 13px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.btn-export-excel {
+  color: #ffffff;
+  background: #20b26b;
+}
+
+.btn-export-excel:hover {
+  background: #15945a;
+  transform: translateY(-2px);
+}
+
+.btn-export-pdf {
+  color: #ffffff;
+  background: #d93f45;
+}
+
+.btn-export-pdf:hover {
+  background: #bd3037;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 760px) {
+  .archive-filter-actions {
+    width: 100%;
+  }
+
+  .archive-filter-actions button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   BOOTING MODE
+   Saat refresh, jangan tampilkan login dulu
+========================================================= */
+
+body.is-booting {
+  overflow: hidden !important;
+  background: url("asset/coretax.png") center center / cover no-repeat fixed !important;
+}
+
+/* Saat validasi session, login dan app disembunyikan dulu */
+body.is-booting .login-screen,
+body.is-booting .app,
+body.is-booting .loading-screen,
+body.is-booting .save-loader {
+  display: none !important;
+}
+
+/* Tampilan transisi ringan, bukan halaman login */
+body.is-booting::after {
+  content: "Memuat sesi COREARSIP...";
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 9999;
+
+  padding: 14px 20px;
+  border-radius: 12px;
+
+  color: #17245a;
+  background: rgba(255, 255, 255, 0.92);
+  border-top: 4px solid #f5c400;
+  box-shadow: 0 18px 42px rgba(23, 36, 90, 0.20);
+
+  font-size: 13px;
+  font-weight: 900;
+
+  transform: translate(-50%, -50%);
+}
+
+/* =========================================================
+   PREMIUM LOGIN COREARSIP
+========================================================= */
+
+.login-card.login-card-premium {
+  position: relative !important;
+  width: min(455px, 94%) !important;
+  padding: 28px 30px 26px !important;
+
+  border-radius: 18px !important;
+  border: 1px solid rgba(229, 234, 243, 0.95) !important;
+  border-top: 6px solid #f5c400 !important;
+
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 253, 0.96)) !important;
+
+  box-shadow:
+    0 28px 70px rgba(23, 36, 90, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+
+  overflow: hidden !important;
+}
+
+.login-card.login-card-premium::before {
+  content: "";
+  position: absolute;
+  right: -80px;
+  top: -80px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: rgba(245, 196, 0, 0.14);
+  pointer-events: none;
+}
+
+.login-card.login-card-premium::after {
+  content: "";
+  position: absolute;
+  left: -90px;
+  bottom: -110px;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: rgba(23, 36, 90, 0.08);
+  pointer-events: none;
+}
+
+.login-card-premium > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Brand */
+.login-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.login-brand-mark {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #e5eaf3;
+  box-shadow: 0 10px 22px rgba(23, 36, 90, 0.10);
+}
+
+.login-brand-mark img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.login-brand-row strong {
+  display: block;
+  color: #17245a;
+  font-size: 20px;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+}
+
+.login-brand-row span {
+  display: block;
+  margin-top: 2px;
+  color: #6f7892;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Header */
+.login-card-head {
+  margin-bottom: 18px;
+}
+
+.login-kicker {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #17245a;
+  background: #fff5cf;
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.login-card-head h1 {
+  margin: 0 !important;
+  text-align: left !important;
+  color: #17245a !important;
+  font-family: Inter, Arial, sans-serif !important;
+  font-size: 30px !important;
+  line-height: 1.12 !important;
+  font-weight: 950 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.login-card-head h1::after {
+  content: "";
+  display: block;
+  width: 92px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: #f5c400;
+}
+
+.login-card-head p {
+  margin: 13px 0 0;
+  color: #66708a;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+/* Mini info */
+.login-mini-info {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 0 0 18px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: #f8fafd;
+  border: 1px solid #e5eaf3;
+}
+
+.login-mini-info span {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: #17245a;
+  background: #f5c400;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.login-mini-info p {
+  margin: 0;
+  color: #53607c;
+  font-size: 11.5px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+/* Field */
+.login-card-premium .field {
+  margin-bottom: 15px !important;
+}
+
+.login-card-premium .field label {
+  margin-bottom: 7px !important;
+  color: #17245a !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.login-input-wrap {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  align-items: center;
+
+  min-height: 48px;
+  border-radius: 12px;
+  border: 1px solid #dfe6f1;
+  background: #f8fafd;
+  overflow: hidden;
+}
+
+.login-input-wrap:focus-within {
+  border-color: #f5c400;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(245, 196, 0, 0.16);
+}
+
+.login-input-wrap > span {
+  display: grid;
+  place-items: center;
+  color: #17245a;
+  font-size: 14px;
+}
+
+.login-input-wrap .login-input {
+  min-height: 48px !important;
+  padding: 0 8px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #17245a !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+
+.password-toggle {
+  height: 34px;
+  margin-right: 7px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  color: #17245a;
+  background: #fff5cf;
+  font-size: 11px;
+  font-weight: 950;
+}
+
+.password-toggle:hover {
+  background: #f5c400;
+}
+
+/* Meta */
+.login-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 4px 0 18px;
+}
+
+.login-meta-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #66708a;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+
+.login-meta-row input {
+  accent-color: #f5c400;
+}
+
+.login-meta-row span {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: #15945a;
+  background: #dff8eb;
+  font-size: 10.5px;
+  font-weight: 950;
+}
+
+/* Button */
+.premium-login-btn {
+  min-height: 48px !important;
+  border-radius: 12px !important;
+  color: #17245a !important;
+  background: linear-gradient(135deg, #f5c400, #ffdc55) !important;
+  box-shadow: 0 14px 28px rgba(245, 196, 0, 0.28) !important;
+  font-size: 14px !important;
+  font-weight: 950 !important;
+}
+
+.premium-login-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 18px 34px rgba(245, 196, 0, 0.34) !important;
+}
+
+/* Security note */
+.premium-security-note {
+  grid-template-columns: 42px 1fr !important;
+  align-items: center !important;
+  margin-top: 16px !important;
+  padding: 13px 14px !important;
+  border-radius: 13px !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 230, 0.96), rgba(248, 250, 253, 0.96)) !important;
+  border: 1px solid rgba(245, 196, 0, 0.34) !important;
+  box-shadow:
+    0 10px 24px rgba(23, 36, 90, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+.premium-security-note::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 13px;
+  bottom: 13px;
+  width: 4px;
+  border-radius: 999px;
+  background: #f5c400;
+}
+
+.security-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #17245a, #24336f);
+  color: #f5c400;
+  font-size: 18px;
+  box-shadow: 0 8px 18px rgba(23, 36, 90, 0.18);
+}
+
+.security-text strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #17245a;
+  font-size: 12.5px;
+  font-weight: 950;
+}
+
+.security-text p {
+  margin: 0;
+  color: #66708a;
+  font-size: 11.5px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 430px) {
+  .login-card.login-card-premium {
+    padding: 24px 22px !important;
+  }
+
+  .login-card-head h1 {
+    font-size: 26px !important;
+  }
+
+  .login-brand-row strong {
+    font-size: 18px;
+  }
+
+  .login-meta-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.password-toggle {
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  margin-right: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #17245a;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.password-toggle:hover {
+  background: #eef2fb;
+  color: #0f1d52;
+}
+
+.password-toggle svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Password / username login jangan bold */
+#username,
+#password,
+.login-input-wrap .login-input {
+  font-weight: 500 !important;
+}
+
+/* =========================================================
+   CORETAX STYLE NAVBAR - 2 ROW
+   Search diganti running text
+========================================================= */
+
+.sidebar.coretax-navbar {
+  position: sticky !important;
+  top: 10px !important;
+  z-index: 1500 !important;
+
+  width: 100% !important;
+  min-height: auto !important;
+  padding: 0 !important;
+
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+
+  overflow: visible !important;
+
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid #e5eaf3 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 18px 42px rgba(23, 36, 90, 0.14) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+/* Baris atas */
+.coretax-nav-top {
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: auto minmax(320px, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+
+  padding: 10px 16px;
+  border-bottom: 1px solid #e8edf5;
+}
+
+/* Logo kiri */
+.coretax-brand-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 250px;
+}
+
+.coretax-brand-left .brand-logo {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.coretax-brand-divider {
+  width: 1px;
+  height: 32px;
+  background: #d8deea;
+}
+
+.coretax-brand-text h2 {
+  margin: 0;
+  color: #17245a;
+  font-size: 18px;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+}
+
+.coretax-brand-text p {
+  margin: 2px 0 0;
+  color: #6f7892;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+/* Running text area menggantikan search */
+.coretax-running-area {
+  min-width: 0;
+  width: 100%;
+}
+
+.coretax-running-area .archive-running-info {
+  width: 100% !important;
+  height: 42px !important;
+  border-radius: 10px !important;
+  background: #f4f6fa !important;
+  border: 1px solid #e5eaf3 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85) !important;
+}
+
+.coretax-running-area .archive-running-badge {
+  background: #fff5cf !important;
+  color: #17245a !important;
+}
+
+/* Kanan navbar */
+.coretax-nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 330px;
+}
+
+.nav-icon-btn {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: #17245a;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.nav-icon-btn:hover {
+  background: #fff5cf;
+}
+
+.coretax-user-pill {
+  min-width: 170px;
+  height: 42px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  background: #f8fafd;
+  border: 1px solid #dfe6f1;
+
+  display: grid;
+  align-content: center;
+}
+
+.coretax-user-pill small {
+  color: #7a849b;
+  font-size: 9.5px;
+  line-height: 1;
+  font-weight: 850;
+}
+
+.coretax-user-pill strong {
+  margin-top: 3px;
+  color: #17245a;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 950;
+}
+
+.coretax-logout {
+  min-height: 38px !important;
+  height: 38px !important;
+  padding: 0 14px !important;
+  border-radius: 9px !important;
+}
+
+/* Baris bawah */
+.coretax-nav-bottom {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+/* Menu bawah dibuat seperti Coretax */
+.coretax-nav-bottom .menu {
+  justify-content: flex-start !important;
+  gap: 18px !important;
+  width: 100%;
+}
+
+.coretax-nav-bottom .menu-single,
+.coretax-nav-bottom .menu-parent {
+  min-height: 38px !important;
+  height: 38px !important;
+  padding: 0 15px !important;
+  border-radius: 9px !important;
+  font-size: 13.5px !important;
+  font-weight: 850 !important;
+}
+
+/* Aktif */
+.coretax-nav-bottom .menu-single.active,
+.coretax-nav-bottom .menu-group.open .menu-parent {
+  background: #fff5cf !important;
+  color: #17245a !important;
+  box-shadow: inset 0 -3px 0 #f5c400 !important;
+}
+
+/* Dropdown turun dari baris bawah */
+.coretax-nav-bottom .menu-sub.coretax-dropdown {
+  top: 48px !important;
+}
+
+/* Responsive */
+@media (max-width: 1250px) {
+  .coretax-nav-top {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .coretax-brand-left,
+  .coretax-nav-right {
+    min-width: 0;
+  }
+
+  .coretax-nav-right {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .coretax-nav-bottom {
+    overflow-x: auto;
+  }
+
+  .coretax-nav-bottom .menu {
+    min-width: max-content;
+  }
+}
+
+@media (max-width: 760px) {
+  .coretax-user-pill,
+  .nav-icon-btn {
+    display: none;
+  }
+
+  .coretax-nav-bottom .menu {
+    gap: 8px !important;
+  }
+}
+
+
+
+/* =========================================================
+   CORETAX MEGA MENU V2 - LEBIH MIRIP, HALUS, TIDAK KASAR
+========================================================= */
+
+/* Overlay belakang dibuat sangat soft, bukan gelap kasar */
+body.navbar-mega-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+
+  background: rgba(248, 250, 253, 0.58);
+  backdrop-filter: blur(2px);
+
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+/* Navbar tetap di depan */
+.sidebar.coretax-navbar,
+.sidebar {
+  z-index: 1600 !important;
+  overflow: visible !important;
+}
+
+/* Menu bawah sebagai anchor */
+.coretax-mega-nav {
+  position: relative !important;
+  justify-content: flex-start !important;
+  gap: 18px !important;
+  overflow: visible !important;
+}
+
+/* Group dibuat static agar mega panel full width */
+.coretax-mega-nav .menu-group {
+  position: static !important;
+}
+
+/* Parent menu dibuat lebih flat seperti Coretax */
+.coretax-mega-nav .menu-single,
+.coretax-mega-nav .menu-parent {
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 0 16px !important;
+
+  border-radius: 9px !important;
+  color: #17245a !important;
+  background: transparent !important;
+
+  font-size: 13.5px !important;
+  font-weight: 850 !important;
+  box-shadow: none !important;
+}
+
+/* State aktif/open lebih soft */
+.coretax-mega-nav .menu-single.active,
+.coretax-mega-nav .menu-group.open .menu-parent {
+  background: #fff5cf !important;
+  color: #17245a !important;
+  box-shadow: inset 0 -3px 0 #f5c400 !important;
+}
+
+/* Matikan dropdown kecil lama */
+.coretax-mega-nav .menu-sub,
+.coretax-mega-nav .menu-group:hover .menu-sub {
+  display: grid !important;
+}
+
+/* Panel mega: selalu ada secara layout, tapi hidden via opacity */
+.coretax-mega-nav .menu-sub.coretax-mega {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: calc(100% + 8px) !important;
+  z-index: 1700 !important;
+
+  width: 100% !important;
+  min-width: 100% !important;
+
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1.05fr !important;
+  gap: 34px !important;
+
+  padding: 34px 38px 36px !important;
+  margin: 0 !important;
+
+  background: rgba(255, 255, 255, 0.985) !important;
+  border: 1px solid #e5eaf3 !important;
+  border-radius: 0 0 18px 18px !important;
+
+  box-shadow:
+    0 26px 62px rgba(23, 36, 90, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+
+  backdrop-filter: blur(14px) !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+
+  transform: translateY(-4px) !important;
+  transition:
+    opacity 0.22s ease,
+    visibility 0.22s ease,
+    transform 0.22s ease !important;
+}
+
+/* Tampil hanya saat open */
+.coretax-mega-nav .menu-group.open > .menu-sub.coretax-mega {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+
+/* Hilangkan title besar absolut yang bikin kasar */
+.coretax-mega::before,
+.menu-sub.coretax-dropdown::before,
+.menu-sub.coretax-dropdown::after {
+  display: none !important;
+}
+
+/* Kolom submenu */
+.coretax-mega .mega-column {
+  display: grid !important;
+  align-content: start !important;
+  gap: 4px !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+/* Judul kolom ala Coretax */
+.coretax-mega .mega-column h4 {
+  margin: 0 0 16px !important;
+  padding-bottom: 12px !important;
+
+  border-bottom: 1px solid #e6ebf3 !important;
+
+  color: #7b849c !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+/* Item submenu dibuat seperti list, bukan card kasar */
+.coretax-mega .mega-column button {
+  width: 100% !important;
+  min-height: 38px !important;
+
+  display: grid !important;
+  grid-template-columns: 24px 1fr !important;
+  align-items: start !important;
+  gap: 10px !important;
+
+  padding: 8px 10px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+
+  color: #17245a !important;
+  background: transparent !important;
+
+  text-align: left !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Hover item lebih soft */
+.coretax-mega .mega-column button:hover,
+.coretax-mega .mega-column button.active {
+  background: #fff7df !important;
+}
+
+/* Icon / nomor kecil, tidak terlalu berat */
+.coretax-mega .mega-column button > span:first-child,
+.coretax-mega .mega-column button .menu-icon {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: #17245a !important;
+
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.coretax-mega .mega-column button .menu-icon img {
+  width: 18px !important;
+  height: 18px !important;
+  object-fit: contain !important;
+}
+
+/* Teks item */
+.coretax-mega .mega-column button strong {
+  display: block !important;
+  margin: 0 !important;
+
+  color: #17245a !important;
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+  font-weight: 850 !important;
+}
+
+/* Deskripsi dibuat lebih kecil dan tidak dominan */
+.coretax-mega .mega-column button small {
+  display: block !important;
+  margin-top: 3px !important;
+
+  color: #7a849b !important;
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+}
+
+/* Kolom highlight dibuat lebih elegan, bukan blok gelap kasar */
+.coretax-mega .mega-highlight {
+  min-height: 100% !important;
+  padding: 26px 28px !important;
+
+  border-radius: 16px !important;
+  border: 1px solid #e5eaf3 !important;
+
+  background:
+    linear-gradient(135deg, #f8fafd 0%, #ffffff 56%, #fff8dd 100%) !important;
+
+  color: #17245a !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  align-content: center !important;
+}
+
+/* Judul highlight */
+.coretax-mega .mega-highlight h4 {
+  margin-bottom: 14px !important;
+  color: #17245a !important;
+  border-bottom: 1px solid #e5eaf3 !important;
+}
+
+/* Isi highlight */
+.coretax-mega .mega-highlight p {
+  margin: 0 !important;
+  color: #53607c !important;
+  font-size: 13px !important;
+  line-height: 1.7 !important;
+  font-weight: 650 !important;
+}
+
+/* Panah menu */
+.coretax-mega-nav .menu-group.open .menu-parent b {
+  transform: rotate(180deg) !important;
+}
+
+
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .coretax-mega-nav .menu-sub.coretax-mega {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+@media (max-width: 820px) {
+  body.navbar-mega-open::before {
+    background: rgba(248, 250, 253, 0.72);
+  }
+
+  .coretax-mega-nav .menu-sub.coretax-mega {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: 120px !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    max-height: 72vh !important;
+
+    grid-template-columns: 1fr !important;
+    overflow-y: auto !important;
+
+    border-radius: 16px !important;
+  }
+}
+
+/* =========================================================
+   FIX MEGA MENU NYAMBUNG PRESISI DENGAN NAVBAR
+========================================================= */
+
+/* Navbar harus jadi area acuan */
+.sidebar.coretax-navbar {
+  position: sticky !important;
+  overflow: visible !important;
+  border-radius: 13px !important;
+}
+
+/* Baris bawah jadi anchor panel */
+.coretax-nav-bottom {
+  position: relative !important;
+  min-height: 54px !important;
+  padding: 0 18px !important;
+  overflow: visible !important;
+  border-radius: 0 0 13px 13px !important;
+}
+
+/* Nav jangan jadi batas panel */
+.coretax-mega-nav {
+  position: static !important;
+  overflow: visible !important;
+}
+
+/* Group jangan membatasi width dropdown */
+.coretax-mega-nav .menu-group {
+  position: static !important;
+}
+
+/* Panel dropdown dibuat selebar navbar bawah, bukan selebar menu */
+.coretax-mega-nav .menu-sub.coretax-mega {
+  position: absolute !important;
+
+  /* kunci presisi: tarik ke kiri-kanan mengikuti padding navbar */
+  left: -18px !important;
+  right: -18px !important;
+  top: 100% !important;
+
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding: 34px 42px 38px !important;
+
+  border-radius: 0 0 13px 13px !important;
+  border: 1px solid #e6ebf3 !important;
+  border-top: 1px solid #edf1f7 !important;
+
+  background: rgba(255, 255, 255, 0.985) !important;
+  box-shadow:
+    0 28px 58px rgba(23, 36, 90, 0.14),
+    inset 0 1px 0 rgba(255,255,255,0.96) !important;
+
+  backdrop-filter: blur(18px) !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+
+  transform: translateY(-6px) !important;
+  transition:
+    opacity 0.22s ease,
+    visibility 0.22s ease,
+    transform 0.22s ease !important;
+}
+
+/* Saat menu aktif, panel muncul nyambung */
+.coretax-mega-nav .menu-group.open > .menu-sub.coretax-mega {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+
+/* Hilangkan gap / garis aneh antara navbar dan panel */
+.coretax-nav-bottom::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  z-index: 3201;
+  background: rgba(255,255,255,0.985);
+}
+
+/* Parent menu aktif tetap di atas panel */
+.coretax-mega-nav .menu-group.open .menu-parent,
+.coretax-mega-nav .menu-single.active {
+  position: relative !important;
+  z-index: 3202 !important;
+  background: #fff5cf !important;
+  box-shadow: inset 0 -3px 0 #f5c400 !important;
+}
+
+/* Panel jangan muncul karena hover CSS lama, hanya karena class open */
+.coretax-mega-nav .menu-group:not(.open) > .menu-sub.coretax-mega {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Responsive tetap aman */
+@media (max-width: 820px) {
+  .coretax-mega-nav .menu-sub.coretax-mega {
+    left: 12px !important;
+    right: 12px !important;
+    top: 126px !important;
+    width: auto !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* =========================================================
+   FIX MEGA MENU PRESISI - TIDAK OVER
+========================================================= */
+
+/* Baris bawah navbar jangan punya padding langsung */
+.coretax-nav-bottom {
+  position: relative !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  border-radius: 0 0 13px 13px !important;
+}
+
+/* Padding dipindahkan ke nav menu, bukan ke container panel */
+.coretax-mega-nav {
+  position: static !important;
+  width: 100% !important;
+  padding: 0 18px !important;
+  overflow: visible !important;
+}
+
+/* Group tidak boleh jadi batas panel */
+.coretax-mega-nav .menu-group {
+  position: static !important;
+}
+
+/* Panel dropdown tepat dari kiri-kanan navbar, tidak keluar */
+.coretax-mega-nav .menu-sub.coretax-mega {
+  position: absolute !important;
+
+  left: 0 !important;
+  right: 0 !important;
+  top: 100% !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+
+  margin: 0 !important;
+  padding: 34px 42px 38px !important;
+
+  border-radius: 0 0 13px 13px !important;
+  border: 1px solid #e6ebf3 !important;
+  border-top: 1px solid #edf1f7 !important;
+
+  background: rgba(255, 255, 255, 0.985) !important;
+  box-shadow:
+    0 28px 58px rgba(23, 36, 90, 0.14),
+    inset 0 1px 0 rgba(255,255,255,0.96) !important;
+
+  backdrop-filter: blur(18px) !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+
+  transform: translateY(-4px) !important;
+  transition:
+    opacity 0.22s ease,
+    visibility 0.22s ease,
+    transform 0.22s ease !important;
+}
+
+/* Panel aktif */
+.coretax-mega-nav .menu-group.open > .menu-sub.coretax-mega {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+
+/* Hilangkan garis putih tambahan yang bikin terlihat patah */
+.coretax-nav-bottom::after {
+  display: none !important;
+}
+
+/* Pastikan navbar tidak kepotong */
+.sidebar.coretax-navbar {
+  overflow: visible !important;
+}
+
+
+
+/* =========================================================
+   BUTTON NEUMORPHISM
+========================================================= */
+
+button,
+.btn,
+.btn-primary,
+.btn-login,
+.premium-login-btn,
+.logout,
+.coretax-logout,
+.menu-single,
+.menu-parent,
+.menu-sub button,
+.coretax-mega .mega-column button,
+.archive-hero-actions button,
+.home-search-box button,
+.coretax-service-card,
+.btn-reset-filter,
+.btn-export-excel,
+.btn-export-pdf,
+.mini-btn,
+.btn-edit,
+.btn-delete,
+.btn-return,
+.pagination-box button,
+.password-toggle,
+.nav-icon-btn {
+  border: 1px solid rgba(255, 255, 255, 0.70) !important;
+  box-shadow:
+    5px 5px 12px rgba(158, 172, 198, 0.30),
+    -5px -5px 12px rgba(255, 255, 255, 0.88) !important;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease !important;
+}
+
+/* Tombol default */
+.btn,
+.logout,
+.coretax-logout,
+.menu-single,
+.menu-parent,
+.nav-icon-btn,
+.password-toggle,
+.pagination-box button,
+.mini-btn {
+  color: #17245a !important;
+  background: #eef3fb !important;
+}
+
+/* Tombol utama kuning */
+.btn-primary,
+.btn-login,
+.premium-login-btn,
+.home-search-box button,
+.archive-hero-actions button:nth-child(2),
+.btn-reset-filter {
+  color: #17245a !important;
+  background: linear-gradient(145deg, #ffdc55, #f5c400) !important;
+}
+
+/* Tombol navy */
+.archive-hero-actions button:first-child {
+  color: #ffffff !important;
+  background: linear-gradient(145deg, #23336e, #17245a) !important;
+  box-shadow:
+    6px 6px 14px rgba(23, 36, 90, 0.28),
+    -5px -5px 12px rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Tombol export */
+.btn-export-excel {
+  color: #ffffff !important;
+  background: linear-gradient(145deg, #27c67a, #20b26b) !important;
+}
+
+.btn-export-pdf,
+.btn-delete,
+.btn-delete-confirm {
+  color: #ffffff !important;
+  background: linear-gradient(145deg, #ec5960, #d93f45) !important;
+}
+
+.btn-edit {
+  color: #ffffff !important;
+  background: linear-gradient(145deg, #3b82f6, #0d6efd) !important;
+}
+
+.btn-return {
+  color: #ffffff !important;
+  background: linear-gradient(145deg, #27c67a, #20b26b) !important;
+}
+
+/* Hover tombol */
+button:hover,
+.btn:hover,
+.menu-single:hover,
+.menu-parent:hover,
+.menu-sub button:hover,
+.coretax-mega .mega-column button:hover,
+.archive-hero-actions button:hover,
+.home-search-box button:hover,
+.pagination-box button:hover,
+.nav-icon-btn:hover,
+.password-toggle:hover {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    7px 7px 16px rgba(158, 172, 198, 0.34),
+    -7px -7px 16px rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Saat tombol diklik */
+button:active,
+.btn:active,
+.menu-single:active,
+.menu-parent:active,
+.menu-sub button:active,
+.archive-hero-actions button:active,
+.home-search-box button:active,
+.pagination-box button:active,
+.nav-icon-btn:active,
+.password-toggle:active {
+  transform: translateY(0) !important;
+  box-shadow: var(--neu-shadow-inset) !important;
+}
+
+/* Active menu pressed */
+.menu-single.active,
+.coretax-mega-nav .menu-single.active,
+.coretax-mega-nav .menu-group.open .menu-parent,
+.pagination-box button.active {
+  background: #fff5cf !important;
+  box-shadow:
+    inset 4px 4px 8px rgba(158, 172, 198, 0.24),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.90),
+    inset 0 -3px 0 #f5c400 !important;
+}
+
+/* =========================================================
+   INPUT NEUMORPHISM
+========================================================= */
+
+.input,
+.search,
+select,
+textarea,
+.login-input,
+.home-search-box input,
+.archive-filter-grid select {
+  background: #eef3fb !important;
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+  box-shadow:
+    inset 4px 4px 9px rgba(158, 172, 198, 0.24),
+    inset -4px -4px 9px rgba(255, 255, 255, 0.86) !important;
+}
+
+.input:focus,
+.search:focus,
+select:focus,
+textarea:focus,
+.login-input:focus,
+.home-search-box input:focus,
+.archive-filter-grid select:focus {
+  background: #f8fafd !important;
+  border-color: #f5c400 !important;
+  box-shadow:
+    inset 3px 3px 7px rgba(158, 172, 198, 0.20),
+    inset -3px -3px 7px rgba(255, 255, 255, 0.90),
+    0 0 0 4px rgba(245, 196, 0, 0.16) !important;
+}
+
+/* =========================================================
+   TABLE & FILTER SOFT
+========================================================= */
+
+th {
+  background: #fff5cf !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(158, 172, 198, 0.22) !important;
+}
+
+td {
+  background: rgba(248, 250, 253, 0.78) !important;
+}
+
+tbody tr:hover td {
+  background: #fffaf0 !important;
+}
+
+/* =========================================================
+   MEGA MENU NEUMORPHISM
+========================================================= */
+
+.coretax-mega-nav .menu-sub.coretax-mega {
+  background: rgba(248, 250, 253, 0.985) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow:
+    12px 12px 30px rgba(158, 172, 198, 0.28),
+    -10px -10px 24px rgba(255, 255, 255, 0.88) !important;
+}
+
+.coretax-mega .mega-highlight {
+  background:
+    linear-gradient(145deg, #f8fafd, #eef3fb) !important;
+  border: 1px solid rgba(255, 255, 255, 0.76) !important;
+  box-shadow: var(--neu-shadow-soft) !important;
+}
+
+/* =========================================================
+   RESPONSIVE SAFETY
+========================================================= */
+
+@media (max-width: 760px) {
+  .panel,
+  .stat-card,
+  .archive-hero,
+  .coretax-service-section,
+  .coretax-service-card {
+    box-shadow:
+      5px 5px 12px rgba(158, 172, 198, 0.24),
+      -5px -5px 12px rgba(255, 255, 255, 0.82) !important;
+  }
+}
+
+/* =========================================================
+   TEXTURE ONLY NEUMORPHISM - COREARSIP
+   Tidak ubah warna, tidak ada glow putih
+========================================================= */
+
+:root {
+  --texture-shadow-soft:
+    6px 7px 14px rgba(23, 36, 90, 0.12),
+    2px 3px 6px rgba(23, 36, 90, 0.06);
+
+  --texture-shadow-card:
+    8px 10px 20px rgba(23, 36, 90, 0.14),
+    2px 3px 7px rgba(23, 36, 90, 0.06);
+
+  --texture-shadow-pressed:
+    inset 4px 5px 10px rgba(23, 36, 90, 0.14),
+    inset 1px 2px 4px rgba(23, 36, 90, 0.08);
+
+  --texture-border: rgba(23, 36, 90, 0.08);
+}
+
+/* =========================================================
+   CARD / PANEL TEXTURE
+========================================================= */
+
+.sidebar.coretax-navbar,
+.topbar,
+.panel,
+.stat-card,
+.archive-hero,
+.archive-status-box,
+.archive-stat-card,
+.archive-home-panel,
+.coretax-service-section,
+.coretax-service-card,
+.core-service-section,
+.core-info-panel,
+.archive-filter-box,
+.table-wrap,
+.user-form-box,
+.login-card,
+.login-card-premium,
+.loading-card,
+.save-loader-card,
+.delete-modal-card,
+.toast-notification,
+.role-focus-card,
+.core-notif-item,
+.home-info-card,
+.home-card-panel,
+.user-box,
+.coretax-user-pill,
+.sync-chip,
+.login-mini-info {
+  border-color: var(--texture-border) !important;
+  box-shadow: var(--texture-shadow-card) !important;
+}
+
+/* Hover card hanya naik sedikit, warna tetap */
+.panel:hover,
+.stat-card:hover,
+.archive-stat-card:hover,
+.coretax-service-card:hover,
+.archive-home-panel:hover,
+.archive-filter-box:hover,
+.user-form-box:hover {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    10px 12px 24px rgba(23, 36, 90, 0.16),
+    3px 4px 8px rgba(23, 36, 90, 0.07) !important;
+}
+
+/* Card gelap / featured tetap warna asli, hanya tekstur */
+.coretax-service-card.featured,
+.coretax-service-card.featured.yellow,
+.role-focus-card.role-main,
+.panel.dark {
+  box-shadow:
+    9px 11px 22px rgba(23, 36, 90, 0.22),
+    3px 4px 9px rgba(23, 36, 90, 0.10) !important;
+}
+
+/* =========================================================
+   BUTTON TEXTURE ONLY
+========================================================= */
+
+button,
+.btn,
+.btn-primary,
+.btn-login,
+.premium-login-btn,
+.logout,
+.coretax-logout,
+.menu-single,
+.menu-parent,
+.menu-sub button,
+.coretax-mega .mega-column button,
+.archive-hero-actions button,
+.home-search-box button,
+.btn-reset-filter,
+.btn-export-excel,
+.btn-export-pdf,
+.mini-btn,
+.btn-edit,
+.btn-delete,
+.btn-return,
+.pagination-box button,
+.password-toggle,
+.nav-icon-btn {
+  border-color: var(--texture-border) !important;
+  box-shadow: var(--texture-shadow-soft) !important;
+}
+
+/* Hover tombol: warna tetap dari CSS asli */
+button:hover,
+.btn:hover,
+.menu-single:hover,
+.menu-parent:hover,
+.menu-sub button:hover,
+.coretax-mega .mega-column button:hover,
+.archive-hero-actions button:hover,
+.home-search-box button:hover,
+.pagination-box button:hover,
+.nav-icon-btn:hover,
+.password-toggle:hover {
+  transform: translateY(-1px) !important;
+  box-shadow:
+    7px 8px 16px rgba(23, 36, 90, 0.14),
+    2px 3px 6px rgba(23, 36, 90, 0.07) !important;
+}
+
+/* Saat klik: efek masuk ke dalam */
+button:active,
+.btn:active,
+.menu-single:active,
+.menu-parent:active,
+.menu-sub button:active,
+.archive-hero-actions button:active,
+.home-search-box button:active,
+.pagination-box button:active,
+.nav-icon-btn:active,
+.password-toggle:active {
+  transform: translateY(0) !important;
+  box-shadow: var(--texture-shadow-pressed) !important;
+}
+
+/* Active menu tetap warna asli, hanya pressed */
+.menu-single.active,
+.coretax-mega-nav .menu-single.active,
+.coretax-mega-nav .menu-group.open .menu-parent,
+.pagination-box button.active {
+  box-shadow:
+    var(--texture-shadow-pressed),
+    inset 0 -3px 0 #f5c400 !important;
+}
+
+/* =========================================================
+   INPUT TEXTURE ONLY
+========================================================= */
+
+.input,
+.search,
+select,
+textarea,
+.login-input,
+.login-input-wrap,
+.home-search-box input,
+.archive-filter-grid select {
+  border-color: var(--texture-border) !important;
+  box-shadow: var(--texture-shadow-pressed) !important;
+}
+
+/* Focus tetap pakai warna asli, tanpa glow putih */
+.input:focus,
+.search:focus,
+select:focus,
+textarea:focus,
+.login-input:focus,
+.home-search-box input:focus,
+.archive-filter-grid select:focus,
+.login-input-wrap:focus-within {
+  box-shadow:
+    var(--texture-shadow-pressed),
+    0 0 0 3px rgba(245, 196, 0, 0.14) !important;
+}
+
+/* =========================================================
+   TABLE TEXTURE
+========================================================= */
+
+.table-wrap {
+  box-shadow: var(--texture-shadow-card) !important;
+}
+
+th {
+  box-shadow:
+    inset 0 -1px 0 rgba(23, 36, 90, 0.10) !important;
+}
+
+td {
+  box-shadow:
+    inset 0 -1px 0 rgba(23, 36, 90, 0.04) !important;
+}
+
+/* =========================================================
+   MEGA MENU TEXTURE
+========================================================= */
+
+.coretax-mega-nav .menu-sub.coretax-mega {
+  border-color: var(--texture-border) !important;
+  box-shadow:
+    10px 14px 28px rgba(23, 36, 90, 0.16),
+    3px 4px 8px rgba(23, 36, 90, 0.07) !important;
+}
+
+.coretax-mega .mega-highlight {
+  border-color: var(--texture-border) !important;
+  box-shadow: var(--texture-shadow-soft) !important;
+}
+
+/* =========================================================
+   HAPUS EFEK PUTIH KALAU MASIH TERSISA
+========================================================= */
+
+.sidebar.coretax-navbar,
+.topbar,
+.panel,
+.stat-card,
+.archive-hero,
+.coretax-service-card,
+button,
+.btn,
+.input,
+.search,
+select,
+textarea {
+  text-shadow: none !important;
+  filter: none !important;
+}
