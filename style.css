@@ -6040,3 +6040,204 @@ textarea {
   text-shadow: none !important;
   filter: none !important;
 }
+
+/* =========================================================
+   STOP MOTION CARD & FORM ONLY
+   Card dan form tidak bergerak saat hover/sentuh
+   Tombol tetap mengikuti CSS bawaan
+========================================================= */
+
+/* CARD tidak bergerak */
+.panel:hover,
+.panel:active,
+.stat-card:hover,
+.stat-card:active,
+.archive-hero:hover,
+.archive-hero:active,
+.archive-stat-card:hover,
+.archive-stat-card:active,
+.archive-home-panel:hover,
+.archive-home-panel:active,
+.archive-filter-box:hover,
+.archive-filter-box:active,
+.user-form-box:hover,
+.user-form-box:active,
+.settings-card:hover,
+.settings-card:active,
+.coretax-service-section:hover,
+.coretax-service-section:active,
+.coretax-service-card:hover,
+.coretax-service-card:active,
+.core-service-section:hover,
+.core-service-section:active,
+.core-info-panel:hover,
+.core-info-panel:active,
+.core-notif-item:hover,
+.core-notif-item:active,
+.home-card-panel:hover,
+.home-card-panel:active,
+.home-info-card:hover,
+.home-info-card:active,
+.home-system-card:hover,
+.home-system-card:active,
+.role-focus-card:hover,
+.role-focus-card:active,
+.login-card:hover,
+.login-card:active,
+.login-card-premium:hover,
+.login-card-premium:active,
+.loading-card:hover,
+.loading-card:active,
+.save-loader-card:hover,
+.save-loader-card:active,
+.delete-modal-card:hover,
+.delete-modal-card:active,
+.toast-notification:hover,
+.toast-notification:active,
+.table-wrap:hover,
+.table-wrap:active,
+.menu-banner:hover,
+.menu-banner:active {
+  transform: none !important;
+}
+
+/* Card yang bentuknya button tetap tidak gerak */
+.core-service-grid button:hover,
+.core-service-grid button:active,
+.home-menu-grid button:hover,
+.home-menu-grid button:active,
+.archive-stat-card button:hover,
+.archive-stat-card button:active {
+  transform: none !important;
+}
+
+/* FORM tidak bergerak */
+.form-grid:hover,
+.form-grid:active,
+.field:hover,
+.field:active,
+.input:hover,
+.input:focus,
+.input:active,
+.search:hover,
+.search:focus,
+.search:active,
+select:hover,
+select:focus,
+select:active,
+textarea:hover,
+textarea:focus,
+textarea:active,
+.login-input:hover,
+.login-input:focus,
+.login-input:active,
+.login-input-wrap:hover,
+.login-input-wrap:focus-within,
+.login-input-wrap:active,
+.home-search-box input:hover,
+.home-search-box input:focus,
+.home-search-box input:active,
+.archive-filter-grid select:hover,
+.archive-filter-grid select:focus,
+.archive-filter-grid select:active {
+  transform: none !important;
+}
+
+/* Hilangkan animasi gerak pada card & form saja */
+.panel,
+.stat-card,
+.archive-hero,
+.archive-stat-card,
+.archive-home-panel,
+.archive-filter-box,
+.user-form-box,
+.settings-card,
+.coretax-service-section,
+.coretax-service-card,
+.core-service-section,
+.core-info-panel,
+.core-notif-item,
+.home-card-panel,
+.home-info-card,
+.home-system-card,
+.role-focus-card,
+.login-card,
+.login-card-premium,
+.loading-card,
+.save-loader-card,
+.delete-modal-card,
+.toast-notification,
+.table-wrap,
+.menu-banner,
+.form-grid,
+.field,
+.input,
+.search,
+select,
+textarea,
+.login-input,
+.login-input-wrap,
+.home-search-box input,
+.archive-filter-grid select {
+  transition:
+    background 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    opacity 0.16s ease !important;
+}
+
+/* =========================================================
+   TOMBOL BUKA FILE ARSIP
+========================================================= */
+
+.archive-file-open {
+  max-width: 320px !important;
+  padding: 4px 6px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+
+  border: 0 !important;
+  border-radius: 6px !important;
+
+  color: #17245a !important;
+  background: transparent !important;
+  box-shadow: none !important;
+
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  text-align: left !important;
+
+  transform: none !important;
+}
+
+.archive-file-open:hover {
+  color: #0d6efd !important;
+  background: #eef3fb !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.archive-file-open span:last-child {
+  display: block;
+  max-width: 270px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.archive-file-old {
+  display: inline-block;
+  max-width: 300px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #7a849b;
+  font-size: 12px;
+  cursor: help;
+}
+

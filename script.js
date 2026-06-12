@@ -26,30 +26,73 @@ async function sendToSpreadsheet(action, payload) {
   try {
     updateSyncStatus('syncing', 'Sinkronisasi...');
 
-    await fetch(API_URL, {
+    const response = await fetch(API_URL, {
       method: 'POST',
-      mode: 'no-cors',
+      redirect: 'follow',
+
+      /*
+       * text/plain digunakan agar request tidak memicu
+       * preflight CORS yang tidak diperlukan.
+       */
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+
       body: JSON.stringify({
         action: action,
         payload: payload
       })
     });
 
+    if (!response.ok) {
+      throw new Error(
+        `Server merespons dengan status ${response.status}.`
+      );
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(
+        result.message || 'Request gagal diproses.'
+      );
+    }
+
     updateSyncStatus('online', 'Spreadsheet Aktif');
-    return true;
+
+    return result;
 
   } catch (error) {
-    console.error('Gagal kirim ke spreadsheet:', error);
+    console.error(
+      'Gagal kirim ke Spreadsheet:',
+      error
+    );
+
     updateSyncStatus('offline', 'Local Mode');
-    return false;
+
+    throw error;
   }
 }
 
 async function loadArsipFromSpreadsheet() {
   try {
-    updateSyncStatus('syncing', 'Memuat data arsip...');
+    updateSyncStatus(
+      'syncing',
+      'Memuat data arsip...'
+    );
 
-    const response = await fetch(API_URL + '?action=GET_ARSIP&ts=' + Date.now());
+    const response = await fetch(
+      API_URL +
+      '?action=GET_ARSIP&ts=' +
+      Date.now()
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Gagal mengambil data: ${response.status}`
+      );
+    }
+
     const result = await response.json();
 
     const rows = Array.isArray(result.data)
@@ -58,38 +101,155 @@ async function loadArsipFromSpreadsheet() {
         ? result
         : [];
 
-    arsipData = rows.map(function (row) {
-      return {
-        id: row.ID_ARSIP || row.id || '',
-        nomor: row.NOMOR_ARSIP || row.nomor || '',
-        judul: row.JUDUL_ARSIP || row.judul || '',
-        kategori: row.KATEGORI || row.kategori || '',
-        unit: row.UNIT_KERJA || row.unit || '',
-        tahun: row.TAHUN || row.tahun || '',
-        status: row.STATUS_RETENSI || row.status || '',
-        file: row.LINK_FILE || row.FILE_ID || row.file || '-'
-      };
-    }).filter(function (item) {
-      return item.id || item.nomor || item.judul;
-    });
+    arsipData = rows
+      .map(function (row) {
+        return {
+          id:
+            row.ID_ARSIP ||
+            row.id ||
+            '',
 
-    localStorage.setItem('SIARDI_DATA', JSON.stringify(arsipData));
+          nomor:
+            row.NOMOR_ARSIP ||
+            row.nomor ||
+            '',
+
+          judul:
+            row.JUDUL_ARSIP ||
+            row.judul ||
+            '',
+
+          kategori:
+            row.KATEGORI ||
+            row.kategori ||
+            '',
+
+          unit:
+            row.UNIT_KERJA ||
+            row.unit ||
+            '',
+
+          tahun:
+            row.TAHUN ||
+            row.tahun ||
+            '',
+
+          tanggalArsip:
+            row.TANGGAL_ARSIP ||
+            '',
+
+          retensiAktif:
+            row.RETENSI_AKTIF ||
+            '',
+
+          retensiInaktif:
+            row.RETENSI_INAKTIF ||
+            '',
+
+          nasibAkhir:
+            row.NASIB_AKHIR ||
+            '',
+
+          status:
+            row.STATUS_RETENSI ||
+            row.status ||
+            '',
+
+          lokasiFisik:
+            row.LOKASI_FISIK ||
+            '',
+
+          linkFile:
+            row.LINK_FILE ||
+            '',
+
+          fileId:
+            row.FILE_ID ||
+            '',
+
+          file:
+            row.NAMA_FILE ||
+            (
+              row.LINK_FILE
+                ? 'Buka File'
+                : '-'
+            ),
+
+          hasFile:
+            Boolean(row.FILE_ID),
+
+          statusPinjam:
+            row.STATUS_PINJAM ||
+            'TERSEDIA',
+
+          kataKunci:
+            row.KATA_KUNCI ||
+            '',
+
+          keterangan:
+            row.KETERANGAN ||
+            '',
+
+          keamanan:
+            row.KLASIFIKASI_KEAMANAN ||
+            'INTERNAL',
+
+          tanggalEvaluasiRetensi:
+            row.TANGGAL_EVALUASI_RETENSI ||
+            '',
+
+          workflowStatus:
+            row.WORKFLOW_STATUS ||
+            'AKTIF'
+        };
+      })
+      .filter(function (item) {
+        return (
+          item.id ||
+          item.nomor ||
+          item.judul
+        );
+      });
+
+    localStorage.setItem(
+      'SIARDI_DATA',
+      JSON.stringify(arsipData)
+    );
 
     resetTablePage('arsip');
     renderAll();
     initArchiveFilters();
 
-    updateSyncStatus('online', 'Spreadsheet Aktif • ' + arsipData.length + ' arsip');
+    if (
+      typeof buildAutomaticNotifications ===
+      'function'
+    ) {
+      buildAutomaticNotifications();
+    }
+
+    updateSyncStatus(
+      'online',
+      `Spreadsheet Aktif • ${arsipData.length} arsip`
+    );
 
   } catch (error) {
-    console.error('Gagal memuat data dari Spreadsheet:', error);
+    console.error(
+      'Gagal memuat data Spreadsheet:',
+      error
+    );
 
-    updateSyncStatus('offline', 'Local Mode');
+    updateSyncStatus(
+      'offline',
+      'Local Mode'
+    );
 
     renderAll();
     initArchiveFilters();
 
-    showToast('Data Spreadsheet belum bisa dimuat. Sistem memakai data lokal.', 'warning');
+    showToast(
+      'Spreadsheet belum dapat dimuat. Sistem menggunakan data lokal.',
+      'warning'
+    );
   }
 }
 
@@ -1492,7 +1652,7 @@ function renderTable(data) {
         <td>${item.unit}</td>
         <td>${item.tahun}</td>
         <td>${badge(item.status)}</td>
-        <td>${item.file || '-'}</td>
+        <td>${renderArchiveFileCell(item)}</td>
         <td>
           <button class="mini-btn" onclick="deleteArchive('${item.id}')">Hapus</button>
         </td>
@@ -1652,55 +1812,661 @@ function resetArchiveFilter() {
   renderTable(currentArchiveRows);
 }
 
-async function saveArchive(event) {
-  event.preventDefault();
+/* =========================================================
+   PENYIMPANAN FILE ARSIP - INDEXED DB
+========================================================= */
 
-  const nomor = document.getElementById('nomorArsip').value.trim();
-  const judul = document.getElementById('judulArsip').value.trim();
+const ARCHIVE_DB_NAME = 'COREARSIP_FILE_DB';
+const ARCHIVE_DB_VERSION = 1;
+const ARCHIVE_FILE_STORE = 'archiveFiles';
 
-  if (!nomor || !judul) {
-    showToast('Nomor arsip dan judul arsip wajib diisi.', 'warning');
+function openArchiveDB() {
+  return new Promise(function (resolve, reject) {
+    const request = indexedDB.open(
+      ARCHIVE_DB_NAME,
+      ARCHIVE_DB_VERSION
+    );
+
+    request.onupgradeneeded = function (event) {
+      const database = event.target.result;
+
+      if (!database.objectStoreNames.contains(ARCHIVE_FILE_STORE)) {
+        database.createObjectStore(ARCHIVE_FILE_STORE, {
+          keyPath: 'id'
+        });
+      }
+    };
+
+    request.onsuccess = function () {
+      resolve(request.result);
+    };
+
+    request.onerror = function () {
+      reject(
+        request.error ||
+        new Error('Database file arsip tidak dapat dibuka.')
+      );
+    };
+  });
+}
+
+/* =========================================================
+   FILE UPLOAD HELPER
+========================================================= */
+
+function fileToBase64(file) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      const result = String(reader.result || '');
+      const base64 = result.includes(',')
+        ? result.split(',')[1]
+        : result;
+
+      resolve(base64);
+    };
+
+    reader.onerror = function () {
+      reject(
+        reader.error ||
+        new Error('File gagal dibaca.')
+      );
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+function normalizeRetensiText(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, ' ');
+}
+
+function getRetensiByKategori(kategori) {
+  const target = normalizeRetensiText(kategori);
+
+  return retensiData.find(function (item) {
+    return normalizeRetensiText(
+      item.kategori || item.kategoriRetensi
+    ) === target;
+  }) || null;
+}
+
+function getCurrentUserName() {
+  return (
+    currentUser?.nama ||
+    currentUser?.username ||
+    'Administrator'
+  );
+}
+
+async function saveArchiveFile(archiveId, file) {
+  const database = await openArchiveDB();
+
+  return new Promise(function (resolve, reject) {
+    const transaction = database.transaction(
+      ARCHIVE_FILE_STORE,
+      'readwrite'
+    );
+
+    const store = transaction.objectStore(ARCHIVE_FILE_STORE);
+
+    store.put({
+      id: archiveId,
+      name: file.name,
+      type: file.type || 'application/octet-stream',
+      size: file.size,
+      lastModified: file.lastModified,
+      blob: file
+    });
+
+    transaction.oncomplete = function () {
+      database.close();
+      resolve();
+    };
+
+    transaction.onerror = function () {
+      database.close();
+
+      reject(
+        transaction.error ||
+        new Error('File arsip gagal disimpan.')
+      );
+    };
+
+    transaction.onabort = function () {
+      database.close();
+
+      reject(
+        transaction.error ||
+        new Error('Penyimpanan file arsip dibatalkan.')
+      );
+    };
+  });
+}
+
+async function getArchiveFile(archiveId) {
+  const database = await openArchiveDB();
+
+  return new Promise(function (resolve, reject) {
+    const transaction = database.transaction(
+      ARCHIVE_FILE_STORE,
+      'readonly'
+    );
+
+    const store = transaction.objectStore(ARCHIVE_FILE_STORE);
+    const request = store.get(archiveId);
+
+    request.onsuccess = function () {
+      database.close();
+      resolve(request.result || null);
+    };
+
+    request.onerror = function () {
+      database.close();
+
+      reject(
+        request.error ||
+        new Error('File arsip tidak dapat ditemukan.')
+      );
+    };
+  });
+}
+
+async function deleteArchiveFile(archiveId) {
+  const database = await openArchiveDB();
+
+  return new Promise(function (resolve, reject) {
+    const transaction = database.transaction(
+      ARCHIVE_FILE_STORE,
+      'readwrite'
+    );
+
+    const store = transaction.objectStore(ARCHIVE_FILE_STORE);
+    store.delete(archiveId);
+
+    transaction.oncomplete = function () {
+      database.close();
+      resolve();
+    };
+
+    transaction.onerror = function () {
+      database.close();
+
+      reject(
+        transaction.error ||
+        new Error('File arsip gagal dihapus.')
+      );
+    };
+  });
+}
+
+async function openArchiveFile(archiveId) {
+  /* Dibuka langsung agar tidak diblokir pop-up browser */
+  const previewWindow = window.open('', '_blank');
+
+  if (!previewWindow) {
+    showToast(
+      'Izinkan pop-up browser untuk membuka file arsip.',
+      'warning'
+    );
     return;
   }
 
-  showSaveLoader('Menyimpan Arsip', 'Data sedang dikirim ke sistem...');
+  previewWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Memuat File Arsip</title>
+      </head>
+      <body style="
+        margin:0;
+        min-height:100vh;
+        display:grid;
+        place-items:center;
+        font-family:Arial,sans-serif;
+        color:#17245a;
+        background:#eef3fb;
+      ">
+        <div>Memuat file arsip...</div>
+      </body>
+    </html>
+  `);
 
   try {
-    const fileInput = document.getElementById('fileArsip');
-    const fileName = fileInput.files.length ? fileInput.files[0].name : '-';
+    const storedFile = await getArchiveFile(archiveId);
 
-    const newData = {
-      id: 'ARS-' + String(Date.now()).slice(-6),
+    if (!storedFile || !storedFile.blob) {
+      previewWindow.close();
+
+      showToast(
+        'File tidak ditemukan. Data lama perlu diunggah ulang.',
+        'warning'
+      );
+      return;
+    }
+
+    const fileUrl = URL.createObjectURL(storedFile.blob);
+
+    previewWindow.location.href = fileUrl;
+
+    /* Bersihkan temporary URL setelah lima menit */
+    window.setTimeout(function () {
+      URL.revokeObjectURL(fileUrl);
+    }, 300000);
+
+  } catch (error) {
+    previewWindow.close();
+    console.error(error);
+
+    showToast(
+      'File arsip tidak dapat dibuka.',
+      'error'
+    );
+  }
+}
+
+function escapeArchiveHTML(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function renderArchiveFileCell(item) {
+  if (item.linkFile) {
+    return `
+      <button
+        type="button"
+        class="archive-file-open"
+        onclick="openDriveArchiveFile('${escapeArchiveHTML(item.id)}')"
+        title="Buka file arsip"
+      >
+        <span>📎</span>
+        <span>
+          ${escapeArchiveHTML(item.file || 'Buka File')}
+        </span>
+      </button>
+    `;
+  }
+
+  if (
+    item.file &&
+    item.file !== '-'
+  ) {
+    return `
+      <span
+        class="archive-file-old"
+        title="File lama belum tersimpan di Google Drive."
+      >
+        📄 ${escapeArchiveHTML(item.file)}
+      </span>
+    `;
+  }
+
+  return '-';
+}
+
+function openDriveArchiveFile(archiveId) {
+  const item = arsipData.find(function (data) {
+    return String(data.id) === String(archiveId);
+  });
+
+  if (!item?.linkFile) {
+    showToast(
+      'Link file belum tersedia.',
+      'warning'
+    );
+
+    return;
+  }
+
+  window.open(
+    item.linkFile,
+    '_blank',
+    'noopener,noreferrer'
+  );
+}
+
+async function saveArchive(event) {
+  event.preventDefault();
+
+  const nomor = document
+    .getElementById('nomorArsip')
+    .value
+    .trim();
+
+  const judul = document
+    .getElementById('judulArsip')
+    .value
+    .trim();
+
+  const kategori =
+    document.getElementById('kategori').value;
+
+  const unit =
+    document.getElementById('unitKerja').value;
+
+  const tahun =
+    document.getElementById('tahun').value;
+
+  const status =
+    document.getElementById('statusRetensi').value;
+
+  const tanggalArsip =
+    document.getElementById('tanggalArsip')
+      ?.value || '';
+
+  const lokasiFisik =
+    document.getElementById('lokasiFisik')
+      ?.value
+      .trim() || '';
+
+  const kataKunci =
+    document.getElementById('kataKunciArsip')
+      ?.value
+      .trim() || judul;
+
+  const keterangan =
+    document.getElementById('keteranganArsip')
+      ?.value
+      .trim() || '';
+
+  const keamanan =
+    document.getElementById('keamananArsip')
+      ?.value || 'INTERNAL';
+
+  const tanggalEvaluasiRetensi =
+    document.getElementById('tanggalEvaluasiRetensi')
+      ?.value || '';
+
+  if (
+    !nomor ||
+    !judul ||
+    !kategori ||
+    !unit ||
+    !tahun ||
+    !tanggalArsip
+  ) {
+    showToast(
+      'Nomor, judul, kategori, unit, tahun, dan tanggal arsip wajib diisi.',
+      'warning'
+    );
+
+    return;
+  }
+
+  const fileInput =
+    document.getElementById('fileArsip');
+
+  const selectedFile =
+    fileInput?.files?.[0] || null;
+
+  /*
+   * Base64 menambah ukuran file.
+   * Batas 8 MB lebih aman untuk Apps Script Web App.
+   */
+  const maximumFileSize =
+    8 * 1024 * 1024;
+
+  if (
+    selectedFile &&
+    selectedFile.size > maximumFileSize
+  ) {
+    showToast(
+      'Ukuran file maksimal 8 MB.',
+      'warning'
+    );
+
+    return;
+  }
+
+  const archiveId =
+    'ARS-' + String(Date.now()).slice(-6);
+
+  const retensiRule =
+    getRetensiByKategori(kategori);
+
+  showSaveLoader(
+    'Menyimpan Arsip',
+    selectedFile
+      ? 'File sedang diunggah ke Google Drive...'
+      : 'Metadata arsip sedang disimpan...'
+  );
+
+  try {
+    let fileData = '';
+
+    if (selectedFile) {
+      fileData = await fileToBase64(
+        selectedFile
+      );
+    }
+
+    const payload = {
+      id: archiveId,
       nomor: nomor,
       judul: judul,
-      kategori: document.getElementById('kategori').value,
-      unit: document.getElementById('unitKerja').value,
-      tahun: document.getElementById('tahun').value,
-      status: document.getElementById('statusRetensi').value,
-      file: fileName
+      kategori: kategori,
+      unit: unit,
+      tahun: tahun,
+      tanggalArsip: tanggalArsip,
+
+      retensiAktif:
+        retensiRule?.masaAktif || '',
+
+      retensiInaktif:
+        retensiRule?.masaInaktif || '',
+
+      nasibAkhir:
+        retensiRule?.statusAkhir || '',
+
+      status: status,
+      lokasiFisik: lokasiFisik,
+      statusPinjam: 'TERSEDIA',
+
+      petugasInput:
+        getCurrentUserName(),
+
+      kataKunci: kataKunci,
+      keterangan: keterangan,
+
+      keamanan: keamanan,
+
+      tanggalEvaluasiRetensi:
+        tanggalEvaluasiRetensi,
+
+      workflowStatus: 'AKTIF',
+
+      fileName:
+        selectedFile?.name || '',
+
+      fileMimeType:
+        selectedFile?.type ||
+        'application/octet-stream',
+
+      fileSize:
+        selectedFile?.size || 0,
+
+      fileData: fileData
+    };
+
+    const response = await sendToSpreadsheet(
+      'SAVE_ARSIP',
+      payload
+    );
+
+    /*
+     * Struktur respons:
+     * response.data       = hasil saveArsip()
+     * response.data.data  = isi baris Spreadsheet
+     */
+    const savedRow =
+      response?.data?.data || {};
+
+    const newData = {
+      id:
+        savedRow.ID_ARSIP ||
+        archiveId,
+
+      nomor:
+        savedRow.NOMOR_ARSIP ||
+        nomor,
+
+      judul:
+        savedRow.JUDUL_ARSIP ||
+        judul,
+
+      kategori:
+        savedRow.KATEGORI ||
+        kategori,
+
+      unit:
+        savedRow.UNIT_KERJA ||
+        unit,
+
+      tahun:
+        savedRow.TAHUN ||
+        tahun,
+
+      tanggalArsip:
+        savedRow.TANGGAL_ARSIP ||
+        tanggalArsip,
+
+      retensiAktif:
+        savedRow.RETENSI_AKTIF ||
+        retensiRule?.masaAktif ||
+        '',
+
+      retensiInaktif:
+        savedRow.RETENSI_INAKTIF ||
+        retensiRule?.masaInaktif ||
+        '',
+
+      nasibAkhir:
+        savedRow.NASIB_AKHIR ||
+        retensiRule?.statusAkhir ||
+        '',
+
+      status:
+        savedRow.STATUS_RETENSI ||
+        status,
+
+      lokasiFisik:
+        savedRow.LOKASI_FISIK ||
+        lokasiFisik,
+
+      linkFile:
+        savedRow.LINK_FILE || '',
+
+      fileId:
+        savedRow.FILE_ID || '',
+
+      file:
+        savedRow.NAMA_FILE ||
+        selectedFile?.name ||
+        '-',
+
+      hasFile:
+        Boolean(savedRow.FILE_ID),
+
+      keamanan:
+        savedRow.KLASIFIKASI_KEAMANAN ||
+        keamanan,
+
+      tanggalEvaluasiRetensi:
+        savedRow.TANGGAL_EVALUASI_RETENSI ||
+        tanggalEvaluasiRetensi,
+
+      workflowStatus:
+        savedRow.WORKFLOW_STATUS ||
+        'AKTIF',
+
+      kataKunci:
+        savedRow.KATA_KUNCI ||
+        kataKunci,
+
+      keterangan:
+        savedRow.KETERANGAN ||
+        keterangan
     };
 
     arsipData.push(newData);
-    localStorage.setItem('SIARDI_DATA', JSON.stringify(arsipData));
 
-    await sendToSpreadsheet('SAVE_ARSIP', newData);
+    localStorage.setItem(
+      'SIARDI_DATA',
+      JSON.stringify(arsipData)
+    );
 
-    document.getElementById('archiveForm').reset();
+    document
+      .getElementById('archiveForm')
+      .reset();
+
+    const keamananInput =
+      document.getElementById('keamananArsip');
+
+    if (keamananInput) {
+      keamananInput.value = 'INTERNAL';
+    }
+
+    resetTablePage('arsip');
+
+    currentArchiveRows =
+      typeof canAccessArchive === 'function'
+        ? arsipData.filter(canAccessArchive)
+        : arsipData;
 
     renderAll();
-initArchiveFilters();
-resetTablePage('arsip');
+    initArchiveFilters();
 
-const arsipButton = document.querySelector(`.menu-sub button[onclick*="'arsip'"]`);
-showPage('arsip', arsipButton);
+    if (
+      typeof refreshPenyusutanArsipOptions ===
+      'function'
+    ) {
+      refreshPenyusutanArsipOptions();
+    }
 
-hideSaveLoader();
-showToast('Data arsip berhasil disimpan.', 'success');
+    if (
+      typeof buildAutomaticNotifications ===
+      'function'
+    ) {
+      buildAutomaticNotifications();
+    }
+
+    const arsipButton =
+      document.querySelector(
+        `.menu-sub button[onclick*="'arsip'"]`
+      );
+
+    showPage('arsip', arsipButton);
+
+    hideSaveLoader();
+
+    showToast(
+      selectedFile
+        ? 'Data dan file berhasil disimpan ke Spreadsheet dan Google Drive.'
+        : 'Data arsip berhasil disimpan.',
+      'success'
+    );
 
   } catch (error) {
     hideSaveLoader();
-    console.error(error);
-    showToast('Data gagal disimpan. Silakan cek koneksi atau Apps Script.', 'error');
+
+    console.error(
+      'Gagal menyimpan arsip:',
+      error
+    );
+
+    showToast(
+      error.message ||
+      'Data atau file arsip gagal disimpan.',
+      'error'
+    );
   }
 }
 
@@ -1758,6 +2524,9 @@ function deleteArchive(id) {
       showSaveLoader('Menghapus Arsip', 'Data sedang dihapus dari sistem...');
 
       try {
+
+        await deleteArchiveFile(id);
+
         arsipData = arsipData.filter(function (item) {
           return item.id !== id;
         });
@@ -3541,3 +4310,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+
